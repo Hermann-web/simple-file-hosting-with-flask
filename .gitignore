@@ -1,0 +1,8 @@
+__pycache__
+.env
+*.bak
+data.json
+examples/output/
+fileshared/
+uploads/
+venv/

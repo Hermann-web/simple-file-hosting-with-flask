@@ -1,0 +1,5 @@
+This is the content of test file 2.
+Sed nec metus eu purus cursus feugiat.
+Fusce a feugiat erat.
+Etiam dignissim felis a dolor gravida, in varius tellus maximus.
+Aenean tincidunt lacinia dapibus.
