@@ -91,13 +91,24 @@ def api_logout():
 
 
 def handle_file_saving(file):
-    filename = slugify(file.filename)
+    filename = slugify_filename(file.filename)
     file_save = app.config['UPLOAD_FOLDER'] / filename
     print(f"saving {file_save.resolve()}")
     file.save(file_save)
     update_data_file(filename)
     return filename
     
+def slugify_filename(filename):
+    # Split the filename and extension
+    _ = filename.rsplit('.', 1)
+    if len(_)<2: return 
+    base, extension = _
+    # Slugify the base part
+    slug_base = slugify(base)
+    # Join the slugified base with the original extension
+    slug_filename = f"{slug_base}.{extension}"
+    return slug_filename
+
 
 @app.route('/upload', methods=['POST'])
 def upload():
