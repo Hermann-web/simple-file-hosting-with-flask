@@ -30,17 +30,16 @@ class CliApp:
         headers = {'Content-Type': 'application/json'}
         data = json.dumps({'username': self.username, 'password': self.password})
         response = self.session.post(url, data=data, headers=headers)
+        print(response.text)
         if response.status_code!=200:
             print(f'Login failed: status_code={response.status_code}')
-            print(response.text)
         
         response_json = json.loads(response.content.decode()) #json.loads(response.text)
         if response_json.get('message') != 'Login successful':
             print(f'Login failed: status_code={response.status_code}')
-            print(response.text)
         
         print('Login successful')
-        print(response_json)
+        # print(response_json)
         self.is_logged_in = True
         
 
@@ -49,10 +48,10 @@ class CliApp:
         print("\n>>>",end="")
         url = f'{self.base_url}'
         response = self.session.get(url)
+        print(response.text)
         
         if not response.status_code == 200:
             print(f'Failed to retrieve files: status_code={response.status_code}')
-            print(response.text)
             return
         
         files = response.json().get('files')
@@ -76,15 +75,17 @@ class CliApp:
             response = self.session.post(url, files=files)
             if response.status_code == 200:
                 print(f'File uploaded successfully from {file_path}')
+                
             else:
-                print(f'Failed to upload file : status_code={response.status_code}')
-                print(response.text)
+                print(f'Failed to upload file from {file_path} : status_code={response.status_code}')
+            print(response.text)
 
     def download_file(self, filename, folder_path, save_filename=''):
         if not self.is_logged_in: self.login()
         print("\n>>>",end="")
         url = f'{self.base_url}/uploads/{filename}'
         response = self.session.get(url)
+        
         
         if response.status_code == 404:
             print(f'file "{filename}" not found : status_code={response.status_code}')
@@ -93,7 +94,6 @@ class CliApp:
         
         if response.status_code != 200:
             print(f'Failed to download file : status_code={response.status_code}')
-            print(response.text)
             return 
         
         if not filename:filename = save_filename
@@ -102,7 +102,7 @@ class CliApp:
         
         with open(saved_path, 'wb') as file:
             file.write(response.content)
-        print(f'File downloaded and saved to {saved_path}')
+        print(f'File downloaded and saved to {saved_path.resolve()}')
     
     def logout(self):
         if not self.is_logged_in: self.login()

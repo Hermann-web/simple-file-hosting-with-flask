@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import os
+from slugify import slugify
 from flask import Flask, render_template, request, redirect, send_from_directory
 from flask import session, jsonify
 import constants
@@ -88,6 +89,16 @@ def api_logout():
     session.clear()
     return jsonify({'message': 'Logged out'})
 
+
+def handle_file_saving(file):
+    filename = slugify(file.filename)
+    file_save = app.config['UPLOAD_FOLDER'] / filename
+    print(f"saving {file_save.resolve()}")
+    file.save(file_save)
+    update_data_file(filename)
+    return filename
+    
+
 @app.route('/upload', methods=['POST'])
 def upload():
     print("upload route !!")
@@ -97,11 +108,7 @@ def upload():
 
     file = request.files['file']
     if file:
-        filename = file.filename
-        file_save = app.config['UPLOAD_FOLDER'] / filename
-        print(f"saving {file_save.resolve()}")
-        file.save(file_save)
-        update_data_file(filename)
+        filename = handle_file_saving(file)
     return redirect('/')
 
 @app.route('/api/upload', methods=['POST'])
@@ -111,10 +118,8 @@ def api_upload():
 
     file = request.files['file']
     if file:
-        filename = file.filename
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        update_data_file(filename)
-        return jsonify({'message': 'File uploaded'})
+        filename = handle_file_saving(file)
+        return jsonify({'message': f'File uploaded: {filename}'})
     else:
         return jsonify({'message': 'No file provided'}), 400
         
