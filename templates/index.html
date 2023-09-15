@@ -54,7 +54,7 @@
                                 <td>
                                     <a href="{{ url_for('download', filename=file[0]) }}" class="btn btn-success btn-sm" role="button">Download</a>
                                     <a href="{{ url_for('open_file', filename=file[0]) }}" class="btn btn-info btn-sm" role="button">Open</a>
-                                    <a href="{{ url_for('read_file', filename=file[0]) }}" class="btn btn-info btn-sm" role="button">Read</a>
+                                    <a href="{{ url_for('raw_file', filename=file[0]) }}" class="btn btn-info btn-sm" role="button">Raw</a>
                                 </td>
                             </tr>
                         {% endfor %}

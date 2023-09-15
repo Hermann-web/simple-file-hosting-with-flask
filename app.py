@@ -158,6 +158,18 @@ def api_download(filename):
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+def get_content_type(file_path):
+    # Determine the content type based on the file extension
+    mime_type, _ = mimetypes.guess_type(file_path)
+
+    # Map .md and .mmd extensions to text/plain
+    if mime_type in ['text/markdown', 'text/x-markdown']:
+        mime_type = 'text/plain'
+    if file_path.endswith(".md") or file_path.endswith(".mmd"):
+        mime_type = 'text/plain'
+
+    return mime_type
+
 @app.route('/open/<path:filename>')
 def open_file(filename):
     if not is_logged_in():
@@ -169,8 +181,11 @@ def open_file(filename):
     if not os.path.exists(file_path):
         return "File not found"
 
-    # Determine the content type based on the file extension
-    mime_type, _ = mimetypes.guess_type(file_path)
+    mime_type = get_content_type(file_path)
+
+    # Map .md and .mmd extensions to text/plain
+    if mime_type == 'text/markdown' or mime_type == 'text/x-markdown':
+        mime_type = 'text/plain'
 
     if mime_type:
         with open(file_path, 'rb') as file:
@@ -178,9 +193,9 @@ def open_file(filename):
         return Response(file_content, content_type=mime_type)
 
     return "Unknown file type"
-    
-@app.route('/read/<path:filename>')
-def read_file(filename):
+
+@app.route('/raw/<path:filename>')
+def raw_file(filename):
     if not is_logged_in():
         print('is not logged in')
         return redirect('/')
