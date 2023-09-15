@@ -43,7 +43,7 @@ def api_index():
 
 def get_files_with_dates():
     data = load_data_from_json()
-    return [(filename, data[filename]) for filename in data if (app.config['UPLOAD_FOLDER']/filename).exists()]
+    return [(filename, data[filename]) for filename in sorted(data, key=data.get) if (app.config['UPLOAD_FOLDER']/filename).exists()]
 
 def load_data_from_json():
     if os.path.exists(app.config['DATA_FILE']):
