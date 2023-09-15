@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import os
 import mimetypes
@@ -8,7 +8,6 @@ from flask import session, jsonify
 from flask import url_for, Response
 import constants
 
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = constants.UPLOAD_FOLDER
 app.config['DATA_FILE'] = constants.DATA_FILE
@@ -16,6 +15,9 @@ app.config['SECRET_KEY'] = constants.FLASK_SECRET_KEY
 app.config['DEBUG'] = constants.DEBUG
 app.config['USERNAME'] = constants.USERNAME
 app.config['PASSWORD'] = constants.PASSWORD
+
+# Set the session timeout to 30 minutes (1800 seconds)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
 print(app.config['DATA_FILE'], type(app.config['DATA_FILE']))
 
