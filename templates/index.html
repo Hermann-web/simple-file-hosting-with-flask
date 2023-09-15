@@ -26,30 +26,30 @@
         
         <h2 class="mt-5 text-light">Uploaded Files:</h2>
         {% if files %}
-            <table class="table table-dark">
-                <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">File Name</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for file in files|reverse %}
+            <div class="table-responsive">
+                <table class="table table-dark table-striped">
+                    <thead>
                         <tr>
-                            <td>{{ file[1] }}</td>
-                            <td>&gt; {{ file[0] }}</td>
-                            <td>
-                                <td>
-                                <a href="{{ url_for('download', filename=file[0]) }}" class="btn btn-success btn-sm" role="button">Download</a>
-                                <a href="{{ url_for('open_file', filename=file[0]) }}" class="btn btn-info btn-sm" role="button">Open</a>
-                                <a href="{{ url_for('read_file', filename=file[0]) }}" class="btn btn-info btn-sm" role="button">read</a>
-                            </td>
-                            </td>
+                            <th scope="col">Date</th>
+                            <th scope="col">File Name</th>
+                            <th scope="col">Actions</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for file in files|reverse %}
+                            <tr>
+                                <td>{{ file[1] }}</td>
+                                <td>{{ file[0] }}</td>
+                                <td>
+                                    <a href="{{ url_for('download', filename=file[0]) }}" class="btn btn-success btn-sm" role="button">Download</a>
+                                    <a href="{{ url_for('open_file', filename=file[0]) }}" class="btn btn-info btn-sm" role="button">Open</a>
+                                    <a href="{{ url_for('read_file', filename=file[0]) }}" class="btn btn-info btn-sm" role="button">Read</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
             <p>No files uploaded yet.</p>
         {% endif %}

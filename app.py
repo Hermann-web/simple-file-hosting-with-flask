@@ -194,6 +194,10 @@ def read_file(filename):
         file_content = file.read()
     return file_content
 
+# Serve static files from the 'static' folder
+@app.route('/<path:filename>')
+def static_files(filename):
+    return send_from_directory('static', filename)
 
 if __name__ == '__main__':
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
