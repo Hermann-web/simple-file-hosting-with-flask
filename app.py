@@ -1,9 +1,11 @@
 from datetime import datetime
 import json
 import os
+import mimetypes
 from slugify import slugify
 from flask import Flask, render_template, request, redirect, send_from_directory
 from flask import session, jsonify
+from flask import url_for, Response
 import constants
 
 
@@ -155,6 +157,43 @@ def api_download(filename):
         return jsonify({'message': 'Unauthorized'}), 401
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/open/<path:filename>')
+def open_file(filename):
+    if not is_logged_in():
+        print('is not logged in')
+        return redirect('/')
+
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    if not os.path.exists(file_path):
+        return "File not found"
+
+    # Determine the content type based on the file extension
+    mime_type, _ = mimetypes.guess_type(file_path)
+
+    if mime_type:
+        with open(file_path, 'rb') as file:
+            file_content = file.read()
+        return Response(file_content, content_type=mime_type)
+
+    return "Unknown file type"
+    
+@app.route('/read/<path:filename>')
+def read_file(filename):
+    if not is_logged_in():
+        print('is not logged in')
+        return redirect('/')
+
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    if not os.path.exists(file_path):
+        return "File not found"
+
+    with open(file_path, 'rb') as file:
+        file_content = file.read()
+    return file_content
+
 
 if __name__ == '__main__':
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
