@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from functools import wraps
 import json
 import os
 import mimetypes
@@ -19,8 +20,6 @@ app.config['PASSWORD'] = constants.PASSWORD
 # Set the session timeout to 30 minutes (1800 seconds)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
-print(app.config['DATA_FILE'], type(app.config['DATA_FILE']))
-
 def validate_credentials(username, password):
     res = (username == app.config['USERNAME'] and password == app.config['PASSWORD'])
     session['logged_in'] = res
@@ -29,11 +28,19 @@ def validate_credentials(username, password):
 def is_logged_in():
     return 'logged_in' in session and session['logged_in']
 
-@app.route('/')
-def index():
-    if not is_logged_in():
-        return redirect('/login')
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not is_logged_in():
+            print('is not logged in')
+            session['previous_url'] = request.url
+            return redirect('/login')
+        return f(*args, **kwargs)
+    return decorated_function
 
+@app.route('/')
+@login_required
+def index():
     files = get_files_with_dates()
     return render_template('index.html', files=files)
 
@@ -60,17 +67,25 @@ def load_data_from_json():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
+    sucessful_login_redirect = lambda : redirect(session.pop('previous_url') if 'previous_url' in session else "\\")
+    default_login_render = lambda : render_template('login.html')
+
     if is_logged_in():
-        return redirect('/')
+        return sucessful_login_redirect()
 
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    if request.method != 'POST':
+        return default_login_render()
 
-        if validate_credentials(username, password):
-            return redirect('/')
+    username = request.form['username']
+    password = request.form['password']
 
-    return render_template('login.html')
+    if validate_credentials(username, password):
+        return sucessful_login_redirect()
+    
+    return default_login_render()
+
+    
 
 @app.route('/api/login', methods=['POST'])
 def api_login():
@@ -115,12 +130,8 @@ def slugify_filename(filename):
 
 
 @app.route('/upload', methods=['POST'])
+@login_required
 def upload():
-    print("upload route !!")
-    if not is_logged_in():
-        print('is not logged in')
-        return redirect('/')
-
     file = request.files['file']
     if file:
         filename = handle_file_saving(file)
@@ -146,11 +157,8 @@ def update_data_file(filename):
 
 
 @app.route('/uploads/<path:filename>')
+@login_required
 def download(filename):
-    if not is_logged_in():
-        print('is not logged in')
-        return redirect('/')
-
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/api/uploads/<path:filename>')
@@ -173,11 +181,8 @@ def get_content_type(file_path):
     return mime_type
 
 @app.route('/open/<path:filename>')
+@login_required
 def open_file(filename):
-    if not is_logged_in():
-        print('is not logged in')
-        return redirect('/')
-
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
     if not os.path.exists(file_path):
@@ -197,11 +202,8 @@ def open_file(filename):
     return "Unknown file type"
 
 @app.route('/raw/<path:filename>')
+@login_required
 def raw_file(filename):
-    if not is_logged_in():
-        print('is not logged in')
-        return redirect('/')
-
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
     if not os.path.exists(file_path):
