@@ -12,6 +12,9 @@
     <!-- https://www.cssscript.com/fast-html-table-sorting/ -->
 	<link rel="stylesheet" href="/sortable-js/sortable.min.css" />
     <script src="/sortable-js/sortable.min.js"></script>
+	<link rel="stylesheet" href="/progress-bar/index.css" />
+    <script src="/progress-bar/index-download.js"></script>
+    <script src="/progress-bar/index-upload.js"></script>
     <style>
         /* Add custom CSS for dark background */
         body {
@@ -26,7 +29,7 @@
 <body>
     <div class="container mt-5">
         <h1 class="text-light">File Upload</h1>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
+        <form action="/upload" method="POST" enctype="multipart/form-data" id="upload-form-index">
             <div class="mb-3">
                 <input type="file" class="form-control" name="file">
             </div>
@@ -34,6 +37,9 @@
         </form>
         <!-- Logout btn -->
         <a href="/logout" class="btn btn-danger">Logout</a>
+
+        <div id="download-wrapper"></div>
+        <div id="upload-wrapper"></div>
         
         <h2 class="mt-5 text-light">Uploaded Files:</h2>
         {% if files %}
@@ -52,7 +58,7 @@
                                 <td>{{ file[1] }}</td>
                                 <td>{{ file[0] }}</td>
                                 <td>
-                                    <a href="{{ url_for('download', filename=file[0]) }}" class="btn btn-success btn-sm" role="button">Download</a>
+                                    <a href="{{ url_for('download', filename=file[0]) }}" class="btn btn-success btn-sm" role="button" id="download-btn">Download</a>
                                     <a href="{{ url_for('open_file', filename=file[0]) }}" class="btn btn-info btn-sm" role="button">Open</a>
                                     <a href="{{ url_for('raw_file', filename=file[0]) }}" class="btn btn-info btn-sm" role="button">Raw</a>
                                 </td>
@@ -79,5 +85,7 @@
           });
         }
     </script>
+
+
 </body>
 </html>
