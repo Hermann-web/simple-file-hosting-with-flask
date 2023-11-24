@@ -1,3 +1,12 @@
+/*original code modified
+- Article: Download Progress with JavaScript’s Fetch Function
+- Author: OpenJavaScript
+- online: December 21, 2022
+- last updated: January 6, 2023.
+- url https://openjavascript.info/2022/12/21/download-progress-with-javascripts-fetch-function/
+*/
+
+
 /*
 <div class="wrapper">
     <div class="progress-bar">
