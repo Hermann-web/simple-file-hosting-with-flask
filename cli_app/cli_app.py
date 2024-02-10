@@ -1,21 +1,10 @@
+
 import requests
 import json
 from pathlib import Path
-from contextlib import contextmanager
-
-@contextmanager
-def cli_app_session_manager(host, username, password):
-    cli_app = CliApp(username=username, password=password, base_url= host)
-    # create a session
-    cli_app.login()
-    try:
-        yield cli_app
-    finally:
-        # logout even if exception occurs in the block
-        cli_app.logout()
 
 
-class CliApp:
+class FileSharingClient:
     def __init__(self, username, password, base_url):
         self.username = username
         self.password = password
@@ -43,10 +32,10 @@ class CliApp:
         self.is_logged_in = True
         
 
-    def list_files(self):
+    def list_files(self, n=10, order='desc'):
         if not self.is_logged_in: self.login()
         print("\n>>>",end="")
-        url = f'{self.base_url}'
+        url = f'{self.base_url}?n={n}&order={order}'
         response = self.session.get(url)
         print(response.text)
         
@@ -104,6 +93,32 @@ class CliApp:
             file.write(response.content)
         print(f'File downloaded and saved to {saved_path.resolve()}')
     
+    def download_last_n_files(self, n, folder_path, filename=None):
+        if not self.is_logged_in:
+            self.login()
+
+        url = f'{self.base_url}/last/{n}/download'
+        params = {'filename': filename} if filename else None
+
+        response = self.session.get(url, params=params)
+        
+        if response.status_code != 200:
+            print(f'Failed to download last {n} files: status_code={response.status_code}')
+            return
+        
+        content_disposition = response.headers.get('Content-Disposition')
+        if content_disposition:
+            filename = content_disposition.split('filename=')[1].strip('"')
+        else:
+            filename = f'last_{n}_files.zip'
+        
+        saved_path = Path(folder_path) / filename
+        with open(saved_path, 'wb') as file:
+            file.write(response.content)
+        
+        print(f'Last {n} files downloaded and saved to {saved_path.resolve()}')
+
+    
     def logout(self):
         if not self.is_logged_in: self.login()
         print("\n>>>",end="")
@@ -123,7 +138,7 @@ if __name__ == '__main__':
     input_folder = Path('examples/data')
     output_folder = Path('examples/output')
     output_folder.mkdir(exist_ok=True)
-    cli_app = CliApp(username=username, password=password, base_url=base_url)
+    cli_app = FileSharingClient(username=username, password=password, base_url=base_url)
     cli_app.login()
     cli_app.upload_file(input_folder/'test_file1.txt')
     cli_app.download_file('noexistant_file', output_folder)
@@ -131,4 +146,5 @@ if __name__ == '__main__':
     cli_app.upload_file(input_folder/'test_file2.txt')
     cli_app.download_file('test_file2.txt', output_folder)
     cli_app.list_files()
+    cli_app.download_last_n_files(5, output_folder)
     cli_app.logout()

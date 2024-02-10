@@ -4,10 +4,11 @@ import json
 import os
 import mimetypes
 from slugify import slugify
-from flask import Flask, render_template, request, redirect, send_from_directory
+from flask import Flask, make_response, render_template, request, redirect, send_from_directory
 from flask import session, jsonify
 from flask import url_for, Response
 import constants
+from utils import create_zip_archive
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = constants.UPLOAD_FOLDER
@@ -49,7 +50,25 @@ def api_index():
     if not is_logged_in():
         return jsonify({'message': 'Unauthorized'}), 401
 
+    # Check if 'n' query parameter is provided, default to 10 if not provided or invalid
+    n = request.args.get('n', type=int, default=10)
+    if n <= 0:
+        return jsonify({'message': 'Invalid value for parameter "n"'}), 400
+
+    # Check if 'order' query parameter is provided, default to 'desc' if not provided or invalid
+    order = request.args.get('order', type=str, default='desc')
+    if order not in ['asc', 'desc']:
+        return jsonify({'message': 'Invalid value for parameter "order". Must be "asc" or "desc".'}), 400
+
     files = get_files_with_dates()
+    files = files[-min(n,len(files)):]
+
+    # Sort files based on the specified order
+    if order == 'asc':
+        files = sorted(files, key=lambda x: x[1])
+    else:
+        files = sorted(files, key=lambda x: x[1], reverse=True)
+
     return jsonify({'files': files})
 
 def get_files_with_dates():
@@ -167,6 +186,33 @@ def api_download(filename):
         return jsonify({'message': 'Unauthorized'}), 401
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+# Function to get the last n files
+def get_last_n_files(n):
+    data = load_data_from_json()
+    files = sorted(data, key=data.get, reverse=True)[:n]
+    return files
+
+@app.route('/api/last/<int:n>/download')
+@login_required
+def api_last_n_files_download(n):
+    if not is_logged_in():
+        return jsonify({'message': 'Unauthorized'}), 401
+
+    files = get_last_n_files(n)
+
+    # Get the filename from the query parameters or generate a unique filename
+    filename = request.args.get('filename', None)
+    
+    # Call the create_zip_archive function from utils.py with the specified or generated filename
+    filename, zip_data = create_zip_archive(files, app.config['UPLOAD_FOLDER'], filename=filename)
+
+    # Prepare response with ZIP archive
+    response = make_response(zip_data)
+    response.headers['Content-Disposition'] = f'attachment; filename={filename}'
+    response.headers['Content-Type'] = 'application/zip'
+
+    return response
 
 def get_content_type(file_path):
     # Determine the content type based on the file extension

@@ -74,3 +74,12 @@ Remember to follow best practices for securing your deployed application.
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+
+## Todo
+
+1. **Extensions Handling**: Improve MIME Content-type for file opening and raw file parsing. Utilize the extensions map from [github/freelamb/simple_http_server](https://github.com/freelamb/simple_http_server/blob/master/simple_http_server.py#L242) to enhance the versatility of file uploads and downloads.
+
+2. - **Inspiration from Other Repositories**: The [simple_http_server](https://github.com/freelamb/simple_http_server) repository as an interesting resource for download handlers.
+
+3. **CLI App Enhancement**: Investigate the possibility of implementing bash completion for the CLI app to streamline command-line interactions. Refer to resources and discussions on implementing bash completion for Python applications, such as those found [here](https://stackoverflow.com/questions/8387924/python-argparse-and-bash-completion), to improve usability and efficiency.
