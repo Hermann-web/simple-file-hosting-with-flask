@@ -2,10 +2,10 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-UPLOAD_FOLDER = Path('uploads')
+UPLOAD_FOLDER = Path("uploads")
 UPLOAD_FOLDER.mkdir(exist_ok=True)
 
-DATA_FILE = Path('data.json')
+DATA_FILE = Path("data.json")
 
 DEBUG = True  # Set this to True in development environment
 
@@ -19,8 +19,7 @@ if not DEBUG:
 else:
     USERNAME = "my-username"
     PASSWORD = "my-password"
-    FLASK_SECRET_KEY = 'my-secret-key'
-
+    FLASK_SECRET_KEY = "my-secret-key"
 
 
 assert USERNAME
