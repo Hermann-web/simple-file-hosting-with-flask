@@ -17,7 +17,7 @@ This document provides details on accessing the File Sharing API routes using cU
 
 To authenticate and obtain a session cookie for subsequent requests:
 
-```shell
+```bash
 curl -X POST -H "Content-Type: application/json" -d '{"username": "<username>", "password": "<password>"}' http://localhost:5000/api/login
 ```
 
@@ -25,7 +25,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"username": "<username>", 
 
 To upload a file to the server:
 
-```shell
+```bash
 curl -X POST -F "file=@/path/to/file.txt" -b "session=<session_cookie>" http://localhost:5000/api/upload
 ```
 
@@ -35,7 +35,7 @@ Replace `/path/to/file.txt` with the actual path to the file you want to upload.
 
 To list files from the server with optional parameters `n` and `order`:
 
-```shell
+```bash
 curl -b "session=<session_cookie>" http://localhost:5000/api/?n=<n>&order=<order>
 ```
 
@@ -45,7 +45,7 @@ Replace `<n>` with the number of files you want to list (optional, default is 10
 
 To download a specific file from the server:
 
-```shell
+```bash
 curl -b "session=<session_cookie>" http://localhost:5000/api/uploads/filename.txt --output filename.txt
 ```
 
@@ -55,7 +55,7 @@ Replace `filename.txt` with the name of the file you want to download. Include t
 
 To download the last N files from the server:
 
-```shell
+```bash
 curl -b "session=<session_cookie>" http://localhost:5000/api/last/<n>/download --output last_files.zip
 ```
 
@@ -65,7 +65,7 @@ Replace `<n>` with the number of files you want to download. Include the session
 
 To logout and end the session:
 
-```shell
+```bash
 curl -b "session=<session_cookie>" http://localhost:5000/api/logout
 ```
 

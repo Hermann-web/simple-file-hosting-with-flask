@@ -2,20 +2,20 @@ import argparse
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Generator
-from cli_app.cli_app import FileSharingClient
+from file_sharing_client import FileSharingClient
 
 DEFAULT_BASE_URL = "http://localhost:5000"
 
 @contextmanager
-def cli_app_session_manager(host, username, password) -> Generator[FileSharingClient, None, None]:
-    cli_app = FileSharingClient(username=username, password=password, base_url= host)
+def client_session_manager(host, username, password) -> Generator[FileSharingClient, None, None]:
+    client = FileSharingClient(username=username, password=password, base_url= host)
     # create a session
-    cli_app.login()
+    client.login()
     try:
-        yield cli_app
+        yield client
     finally:
         # logout even if exception occurs in the block
-        cli_app.logout()
+        client.logout()
 
 def main():
     parser = argparse.ArgumentParser(description='File sharing CLI')
@@ -33,8 +33,8 @@ def main():
         print('Please provide a username and password')
         return
 
-    with cli_app_session_manager(host=args.host, username=args.username, password=args.password) as cli_app:
-        assert isinstance(cli_app, FileSharingClient)
+    with client_session_manager(host=args.host, username=args.username, password=args.password) as file_sharing_client:
+        assert isinstance(file_sharing_client, FileSharingClient)
         print("\n>>>proceed...\n")
     
         
@@ -44,13 +44,13 @@ def main():
         elif args.command == 'list':
             n = args.n if args.n else 10
             order = args.order if args.order else 'desc'
-            cli_app.list_files(n=n, order=order)
+            file_sharing_client.list_files(n=n, order=order)
         
         elif args.command == 'upload':
             if not args.file:
                 print('Please provide a file to upload')
                 return
-            cli_app.upload_file(args.file)
+            file_sharing_client.upload_file(args.file)
             
         elif args.command == 'download':
             if not args.file:
@@ -70,7 +70,7 @@ def main():
                 print('Invalid output path')
                 return
 
-            cli_app.download_file(file_to_download, folder, save_filename=filename, order=args.order)
+            file_sharing_client.download_file(file_to_download, folder, save_filename=filename, order=args.order)
         
         elif args.command == 'downloadl':
             if not args.n:
@@ -90,7 +90,7 @@ def main():
                 print('Invalid output path')
                 return
 
-            cli_app.download_last_n_files(n, folder, filename)
+            file_sharing_client.download_last_n_files(n, folder, filename)
 
 if __name__ == '__main__':
     main()

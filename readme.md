@@ -5,24 +5,24 @@ A simple Flask application for sharing files.
 ## Installation
 
 1. Clone the repository:
-   ```
+   ```bash
    git clone https://github.com/hermann-web/simple-file-hosting-with-flask.git
    ```
 
 2. Create a virtual environment and activate it:
-   ```shell
+   ```bash
    python3 -m venv env
    source env/bin/activate
    ```
 
 3. Install the required dependencies:
-   ```
+   ```bash
    pip install -r requirements.txt
    ```
 
 4. Start the Flask development server:
-   ```
-   python app.py
+   ```bash
+   python src/app.py
    ```
 
 5. Access the application by visiting [http://localhost:5000](http://localhost:5000) in your web browser.
@@ -35,13 +35,13 @@ A simple Flask application for sharing files.
 
 ### access the app through an api 
 - you can access the api with the routes `http://localhost:5000/api/*`
--  The file [cli_app/cli_app.py](/cli_app/cli_app.py) to access the api along with a context manager to handle sessions
+-  The file [cli_app/file_sharing_client](/cli_app/file_sharing_client.py) to access the api along with a context manager to handle sessions
 - you can read the [api documentation](/docs/api.md)
 
 ### access the app's api with a cli app
 - The file [cli_app/sharefile.py](/cli_app/sharefile.py) provide a cli app to access the api context manager
-- Using your cli, you can get list, upload and download files. The api will be called behind the hood by [cli_app/cli_app.py](/cli_app/cli_app.py)
-- you can read the [api documentation](/docs/cli-app.md)
+- Using your cli, you can get list, upload and download files. The api will be called behind the hood by [cli_app/file_sharing_client](/cli_app/file_sharing_client.py)
+- you can read the [api documentation](/cli_app/docs/cli-app.md)
 
 
 # Deployment Guide
