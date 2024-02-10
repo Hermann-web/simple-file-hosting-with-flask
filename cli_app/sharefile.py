@@ -20,13 +20,13 @@ def client_session_manager(host, username, password) -> Generator[FileSharingCli
 def main():
     parser = argparse.ArgumentParser(description='File sharing CLI')
     parser.add_argument('command', choices=['login', 'logout', 'list', 'upload', 'download', 'downloadl'], help='Command to execute')
-    parser.add_argument('--host', help=f'host server: default={DEFAULT_BASE_URL}', default=DEFAULT_BASE_URL)
-    parser.add_argument('--username', help='Username')
-    parser.add_argument('--password', help='Password')
-    parser.add_argument('--file', help='File to upload or download')
-    parser.add_argument('--output', help='Directory or file path to save the downloaded file')
-    parser.add_argument('--n', type=int, help='Number of files to list or download')
-    parser.add_argument('--order', choices=['asc', 'desc'], help='Order of files to list or download')
+    parser.add_argument('-H', '--host', help=f'host server: default={DEFAULT_BASE_URL}', default=DEFAULT_BASE_URL)
+    parser.add_argument('-u', '--username', help='Username')
+    parser.add_argument('-p', '--password', help='Password')
+    parser.add_argument('-f', '--file', help='File to upload or download')
+    parser.add_argument('-o', '--output', help='Directory or file path to save the downloaded file')
+    parser.add_argument('-n', '--nbfiles', type=int, help='Number of files to list or download')
+    parser.add_argument('-r', '--order', choices=['asc', 'desc'], help='Order of files to list or download')
     args = parser.parse_args()
 
     if not (args.username and args.password):
@@ -42,7 +42,7 @@ def main():
             return
                  
         elif args.command == 'list':
-            n = args.n if args.n else 10
+            n = args.nbfiles if args.nbfiles else 10
             order = args.order if args.order else 'desc'
             file_sharing_client.list_files(n=n, order=order)
         
@@ -73,11 +73,11 @@ def main():
             file_sharing_client.download_file(file_to_download, folder, save_filename=filename, order=args.order)
         
         elif args.command == 'downloadl':
-            if not args.n:
+            if not args.nbfiles:
                 print('Please provide the number of files to download')
                 return
             
-            n = args.n
+            n = args.nbfiles
 
             folder = Path(args.output) if args.output else Path('fileshared')
             folder.mkdir(exist_ok=True)
