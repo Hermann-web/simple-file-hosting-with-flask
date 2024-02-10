@@ -7,7 +7,7 @@ UPLOAD_FOLDER.mkdir(exist_ok=True)
 
 DATA_FILE = Path("data.json")
 
-DEBUG = True  # Set this to True in development environment
+DEBUG = False  # Set this to True in development environment
 
 # Load environment variables from .env file
 load_dotenv()
