@@ -2,6 +2,7 @@ import argparse
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Generator
+
 from file_sharing_client import FileSharingClient
 
 DEFAULT_BASE_URL = "http://localhost:5000"

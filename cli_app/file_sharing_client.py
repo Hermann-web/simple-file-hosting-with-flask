@@ -1,6 +1,7 @@
-import requests
 import json
 from pathlib import Path
+
+import requests
 
 
 class FileSharingClient:

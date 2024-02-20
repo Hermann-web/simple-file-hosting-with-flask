@@ -1,26 +1,32 @@
+import json
+import mimetypes
+import os
+import sys
 from datetime import datetime, timedelta
 from functools import wraps
-import json
-import os
-import mimetypes
-from slugify import slugify
+
 from flask import (
     Flask,
+    Response,
+    jsonify,
     make_response,
+    redirect,
     render_template,
     request,
-    redirect,
     send_from_directory,
+    session,
+    url_for,
 )
-from flask import session, jsonify
-from flask import url_for, Response
+from slugify import slugify
+
+sys.path.append(".")
 from src.constants import (
-    UPLOAD_FOLDER,
     DATA_FILE,
-    FLASK_SECRET_KEY,
     DEBUG,
-    USERNAME,
+    FLASK_SECRET_KEY,
     PASSWORD,
+    UPLOAD_FOLDER,
+    USERNAME,
 )
 from src.utils import create_zip_archive
 

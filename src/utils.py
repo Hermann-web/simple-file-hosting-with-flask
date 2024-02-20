@@ -1,7 +1,7 @@
 import os
 import zipfile
-from io import BytesIO
 from datetime import datetime
+from io import BytesIO
 
 
 def create_zip_archive(files, upload_folder, filename=None):
