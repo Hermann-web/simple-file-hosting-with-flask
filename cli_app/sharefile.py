@@ -94,7 +94,7 @@ def main():
                 return
 
             file_sharing_client.download_file(
-                file_to_download, folder, save_filename=filename, order=args.order
+                file_to_download, folder, save_filename=filename
             )
 
         elif args.command == "downloadl":
