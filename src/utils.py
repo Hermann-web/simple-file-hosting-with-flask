@@ -1,3 +1,4 @@
+"""utility function"""
 import os
 import zipfile
 from datetime import datetime
@@ -5,6 +6,18 @@ from io import BytesIO
 
 
 def create_zip_archive(files, upload_folder, filename=None):
+    """
+    Create a ZIP archive containing specified files.
+
+    Args:
+        files (list): List of filenames to be included in the ZIP archive.
+        upload_folder (str): Path to the folder where the files are located.
+        filename (str, optional): Name of the ZIP archive. If not provided,
+        a unique filename will be generated.
+
+    Returns:
+        tuple: A tuple containing the filename of the ZIP archive and its content as bytes.
+    """
     file_paths = [os.path.join(upload_folder, filename) for filename in files]
 
     # Create an in-memory ZIP archive

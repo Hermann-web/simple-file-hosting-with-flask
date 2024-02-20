@@ -1,3 +1,4 @@
+"""Import necessary libraries and modules."""
 import json
 import mimetypes
 import os
@@ -43,16 +44,29 @@ app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
 
 
 def validate_credentials(username, password):
+    """
+    Validate user credentials.
+
+    Args:
+        username (str): Username provided by the user.
+        password (str): Password provided by the user.
+
+    Returns:
+        bool: True if the credentials are valid, False otherwise.
+    """
     res = username == app.config["USERNAME"] and password == app.config["PASSWORD"]
     session["logged_in"] = res
     return res
 
 
 def is_logged_in():
+    """Check if the user is logged in."""
     return "logged_in" in session and session["logged_in"]
 
 
 def login_required(func):
+    """Decorator to check if user is logged in."""
+
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if not is_logged_in():
@@ -65,6 +79,8 @@ def login_required(func):
 
 
 def api_login_required(func):
+    """Decorator to check if API user is logged in."""
+
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if not is_logged_in():
@@ -77,6 +93,7 @@ def api_login_required(func):
 @app.route("/")
 @login_required
 def index():
+    """Render the index page."""
     files = get_files_with_dates()
     return render_template("index.html", files=files)
 
@@ -84,6 +101,7 @@ def index():
 @app.route("/api")
 @api_login_required
 def api_index():
+    """API endpoint to retrieve file information."""
     # Check if 'n' query parameter is provided, default to 10 if not provided or invalid
     nb_files = request.args.get("n", type=int, default=10)
     if nb_files <= 0:
@@ -114,6 +132,7 @@ def api_index():
 
 
 def get_files_with_dates():
+    """Retrieve files with their modification dates."""
     data = load_data_from_json()
     return [
         (filename, data[filename])
@@ -123,6 +142,12 @@ def get_files_with_dates():
 
 
 def load_data_from_json():
+    """
+    Load data from JSON file.
+
+    Returns:
+        dict: Loaded data from the JSON file.
+    """
     if os.path.exists(app.config["DATA_FILE"]):
         with open(app.config["DATA_FILE"], "r", encoding="utf-8") as file:
             try:
@@ -133,15 +158,18 @@ def load_data_from_json():
 
 
 def sucessful_login_redirect():
+    """Redirect user after successful login."""
     return redirect(session.pop("previous_url") if "previous_url" in session else "\\")
 
 
 def default_login_render():
+    """Render default login page."""
     return render_template("login.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """Handle user login."""
     if is_logged_in():
         return sucessful_login_redirect()
 
@@ -159,6 +187,7 @@ def login():
 
 @app.route("/api/login", methods=["POST"])
 def api_login():
+    """Handle API user login."""
     username = request.json.get("username")
     password = request.json.get("password")
 
@@ -170,17 +199,20 @@ def api_login():
 
 @app.route("/logout")
 def logout():
+    """Handle user logout."""
     session.clear()
     return redirect("/login")
 
 
 @app.route("/api/logout")
 def api_logout():
+    """Handle API user logout."""
     session.clear()
     return jsonify({"message": "Logged out"})
 
 
 def handle_file_saving(file):
+    """Handle saving of uploaded files."""
     filename = slugify_filename(file.filename)
     file_save = app.config["UPLOAD_FOLDER"] / filename
     print(f"saving {file_save.resolve()}")
@@ -190,6 +222,15 @@ def handle_file_saving(file):
 
 
 def slugify_filename(filename):
+    """
+    Slugify filename.
+
+    Args:
+        filename (str): Original filename.
+
+    Returns:
+        str: Slugified filename.
+    """
     # Split the filename and extension
     _ = filename.rsplit(".", 1)
     assert len(_) == 2
@@ -204,6 +245,7 @@ def slugify_filename(filename):
 @app.route("/upload", methods=["POST"])
 @login_required
 def upload():
+    """Handle file upload."""
     file = request.files["file"]
     if file:
         handle_file_saving(file)
@@ -213,6 +255,7 @@ def upload():
 @app.route("/api/upload", methods=["POST"])
 @api_login_required
 def api_upload():
+    """Handle API file upload."""
     file = request.files["file"]
     if not file:
         return jsonify({"message": "No file provided"}), 400
@@ -221,6 +264,7 @@ def api_upload():
 
 
 def update_data_file(filename):
+    """Update data file with new file information."""
     data = load_data_from_json()
     data[filename] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(app.config["DATA_FILE"], "w", encoding="utf-8") as file:
@@ -230,6 +274,7 @@ def update_data_file(filename):
 @app.route("/uploads/<path:filename>")
 @login_required
 def download(filename):
+    """Handle file download."""
     file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
 
     if not os.path.exists(file_path):
@@ -241,11 +286,13 @@ def download(filename):
 @app.route("/api/uploads/<path:filename>")
 @api_login_required
 def api_download(filename):
+    """Handle API file download."""
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 
 # Function to get the last n files
 def get_last_n_files(nb_files):
+    """Get the last n files."""
     data = load_data_from_json()
     files = sorted(data, key=data.get, reverse=True)[:nb_files]
     return files
@@ -254,6 +301,7 @@ def get_last_n_files(nb_files):
 @app.route("/api/last/<int:n>/download")
 @api_login_required
 def api_last_n_files_download(nb_files):
+    """Handle API download of last n files."""
     files = get_last_n_files(nb_files)
 
     # Get the filename from the query parameters or generate a unique filename
@@ -273,6 +321,15 @@ def api_last_n_files_download(nb_files):
 
 
 def get_content_type(file_path):
+    """
+    Get content type based on file extension.
+
+    Args:
+        file_path (str): Path to the file.
+
+    Returns:
+        str: Content type of the file.
+    """
     # Determine the content type based on the file extension
     mime_type, _ = mimetypes.guess_type(file_path)
 
@@ -288,6 +345,7 @@ def get_content_type(file_path):
 @app.route("/open/<path:filename>")
 @login_required
 def open_file(filename):
+    """Open a file."""
     file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
 
     if not os.path.exists(file_path):
@@ -310,6 +368,7 @@ def open_file(filename):
 @app.route("/raw/<path:filename>")
 @login_required
 def raw_file(filename):
+    """Return raw file content."""
     file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
 
     if not os.path.exists(file_path):
@@ -323,6 +382,7 @@ def raw_file(filename):
 # Serve static files from the 'static' folder
 @app.route("/<path:filename>")
 def static_files(filename):
+    """Serve static files."""
     return send_from_directory("static", filename)
 
 

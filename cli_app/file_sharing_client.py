@@ -139,7 +139,7 @@ class FileSharingClient:
             print(response.text)
 
 
-if __name__ == "__main__":
+def main():
     username = "****"  # put your user token here #the one in the .env file
     password = "****"  # put your user key here #the one in the .env file
     base_url = "http://localhost:5000"
@@ -157,3 +157,7 @@ if __name__ == "__main__":
     client.list_files()
     client.download_last_n_files(5, output_folder)
     client.logout()
+
+
+if __name__ == "__main__":
+    main()
