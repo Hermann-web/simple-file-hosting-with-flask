@@ -26,6 +26,7 @@ from src.constants import (
     DEBUG,
     FLASK_SECRET_KEY,
     PASSWORD,
+    STATIC_FOLDER,
     UPLOAD_FOLDER,
     USERNAME,
 )
@@ -275,10 +276,6 @@ def update_data_file(filename):
 @login_required
 def download(filename):
     """Handle file download."""
-    file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-
-    if not os.path.exists(file_path):
-        return "File not found"
 
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
@@ -383,10 +380,8 @@ def raw_file(filename):
 @app.route("/<path:filename>")
 def static_files(filename):
     """Serve static files."""
-    return send_from_directory("static", filename)
+    return send_from_directory(STATIC_FOLDER, filename)
 
 
 if __name__ == "__main__":
-    if not os.path.exists(app.config["UPLOAD_FOLDER"]):
-        os.makedirs(app.config["UPLOAD_FOLDER"])
     app.run()
