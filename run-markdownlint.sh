@@ -15,8 +15,7 @@ check_command() {
 }
 
 # Check if isort and black are installed globally
-check_command "isort" "pip install isort" || return 1
-check_command "black" "pip install black" || return 1
+check_command "markdownlint-cli2" "npm install markdownlint-cli2 --global" || return 1
 
-isort --profile black ./**/*.py  # Sort imports using isort with black profile
-black ./**/*.py  # Format code using black
+# If markdownlint-cli2 is installed, fix linting issues in Markdown files
+find -type f -path ".*/docs/*.md" -exec markdownlint-cli2 --fix {} +

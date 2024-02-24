@@ -5,22 +5,26 @@ A simple Flask application for sharing files.
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/hermann-web/simple-file-hosting-with-flask.git
    ```
 
 2. Create a virtual environment and activate it:
+
    ```bash
    python3 -m venv env
    source env/bin/activate
    ```
 
 3. Install the required dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. Start the Flask development server:
+
    ```bash
    python src/app.py
    ```
@@ -28,23 +32,26 @@ A simple Flask application for sharing files.
 5. Access the application by visiting [http://localhost:5000](http://localhost:5000) in your web browser.
 
 ## Usage
-### access the flask web 
+
+### access the flask web
+
 - The main page displays a list of shared files.
 - To upload a file, click on "Upload a File" and select the file you want to share.
 - The uploaded files will be listed on the main page for download.
 
-### access the app through an api 
+### access the app through an api
+
 - you can access the api with the routes `http://localhost:5000/api/*`
--  The file [cli_app/file_sharing_client](/cli_app/file_sharing_client.py) to access the api along with a context manager to handle sessions
+- The file [cli_app/file_sharing_client](/cli_app/file_sharing_client.py) to access the api along with a context manager to handle sessions
 - you can read the [api documentation](/docs/api.md)
 
 ### access the app's api with a cli app
+
 - The file [cli_app/sharefile.py](/cli_app/sharefile.py) provide a cli app to access the api context manager
 - Using your cli, you can get list, upload and download files. The api will be called behind the hood by [cli_app/file_sharing_client](/cli_app/file_sharing_client.py)
 - you can read the [api documentation](/cli_app/docs/cli-app.md)
 
-
-# Deployment Guide
+## Deployment Guide
 
 To deploy the File Sharing App, follow these steps:
 
@@ -70,11 +77,9 @@ To deploy the File Sharing App, follow these steps:
 
 Remember to follow best practices for securing your deployed application.
 
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
 
 ## Todo
 

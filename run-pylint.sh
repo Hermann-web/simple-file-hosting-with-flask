@@ -15,8 +15,7 @@ check_command() {
 }
 
 # Check if isort and black are installed globally
-check_command "isort" "pip install isort" || return 1
-check_command "black" "pip install black" || return 1
+check_command "pylint" "pip install pylint" || return 1
 
-isort --profile black ./**/*.py  # Sort imports using isort with black profile
-black ./**/*.py  # Format code using black
+# If pylint is installed, run pylint on all Python files
+pylint ./**/*.py --output-format text

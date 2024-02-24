@@ -1,11 +1,15 @@
+"contants data"
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
-UPLOAD_FOLDER = Path("uploads")
+UPLOAD_FOLDER = Path("uploads").absolute()
 UPLOAD_FOLDER.mkdir(exist_ok=True)
+STATIC_FOLDER = Path("static").absolute()
+assert STATIC_FOLDER.exists() and not STATIC_FOLDER.is_file()
 
-DATA_FILE = Path("data.json")
+DATA_FILE = Path("data.json").absolute()
 
 DEBUG = False  # Set this to True in development environment
 

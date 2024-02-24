@@ -2,6 +2,7 @@ import argparse
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Generator
+
 from file_sharing_client import FileSharingClient
 
 DEFAULT_BASE_URL = "http://localhost:5000"
@@ -19,6 +20,75 @@ def client_session_manager(
     finally:
         # logout even if exception occurs in the block
         client.logout()
+
+
+def handle_login(*args, **kwargs):
+    """Handle login command."""
+    return
+
+
+def handle_logout(*args, **kwargs):
+    """Handle logout command."""
+    return
+
+
+def handle_list(args, file_sharing_client: FileSharingClient):
+    """Handle list command."""
+    nb_files = args.nbfiles if args.nbfiles else 10
+    order = args.order if args.order else "desc"
+    file_sharing_client.list_files(n=nb_files, order=order)
+
+
+def handle_upload(args, file_sharing_client: FileSharingClient):
+    """Handle upload command."""
+    if not args.file:
+        print("Please provide a file to upload")
+        return
+    file_sharing_client.upload_file(args.file)
+
+
+def handle_download(args, file_sharing_client: FileSharingClient):
+    """Handle download command."""
+    if not args.file:
+        print("Please provide a file to download")
+        return
+
+    file_to_download = args.file
+
+    folder = Path(args.output) if args.output else Path("fileshared")
+    folder.mkdir(exist_ok=True)
+
+    if folder.is_dir():
+        filename = ""
+    elif folder.is_file():
+        folder, filename = folder.parent, folder.stem
+    else:
+        print("Invalid output path")
+        return
+
+    file_sharing_client.download_file(file_to_download, folder, save_filename=filename)
+
+
+def handle_downloadl(args, file_sharing_client: FileSharingClient):
+    """Handle downloadl command."""
+    if not args.nbfiles:
+        print("Please provide the number of files to download")
+        return
+
+    nb_files = args.nbfiles
+
+    folder = Path(args.output) if args.output else Path("fileshared")
+    folder.mkdir(exist_ok=True)
+
+    if folder.is_dir():
+        filename = ""
+    elif folder.is_file():
+        folder, filename = folder.parent, folder.stem
+    else:
+        print("Invalid output path")
+        return
+
+    file_sharing_client.download_last_n_files(nb_files, folder, filename)
 
 
 def main():
@@ -61,61 +131,20 @@ def main():
         assert isinstance(file_sharing_client, FileSharingClient)
         print("\n>>>proceed...\n")
 
-        if args.command in ["login", "logout"]:
-            return
+        command_handlers = {
+            "login": handle_login,
+            "logout": handle_logout,
+            "list": handle_list,
+            "upload": handle_upload,
+            "download": handle_download,
+            "downloadl": handle_downloadl,
+        }
 
-        elif args.command == "list":
-            n = args.nbfiles if args.nbfiles else 10
-            order = args.order if args.order else "desc"
-            file_sharing_client.list_files(n=n, order=order)
-
-        elif args.command == "upload":
-            if not args.file:
-                print("Please provide a file to upload")
-                return
-            file_sharing_client.upload_file(args.file)
-
-        elif args.command == "download":
-            if not args.file:
-                print("Please provide a file to download")
-                return
-
-            file_to_download = args.file
-
-            folder = Path(args.output) if args.output else Path("fileshared")
-            folder.mkdir(exist_ok=True)
-
-            if folder.is_dir():
-                filename = ""
-            elif folder.is_file():
-                folder, filename = folder.parent, folder.stem
-            else:
-                print("Invalid output path")
-                return
-
-            file_sharing_client.download_file(
-                file_to_download, folder, save_filename=filename
-            )
-
-        elif args.command == "downloadl":
-            if not args.nbfiles:
-                print("Please provide the number of files to download")
-                return
-
-            n = args.nbfiles
-
-            folder = Path(args.output) if args.output else Path("fileshared")
-            folder.mkdir(exist_ok=True)
-
-            if folder.is_dir():
-                filename = ""
-            elif folder.is_file():
-                folder, filename = folder.parent, folder.stem
-            else:
-                print("Invalid output path")
-                return
-
-            file_sharing_client.download_last_n_files(n, folder, filename)
+        handler = command_handlers.get(args.command)
+        if handler:
+            handler(args, file_sharing_client)
+        else:
+            print("Invalid command")
 
 
 if __name__ == "__main__":
