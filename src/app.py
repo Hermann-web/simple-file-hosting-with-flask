@@ -295,7 +295,7 @@ def get_last_n_files(nb_files):
     return files
 
 
-@app.route("/api/last/<int:n>/download")
+@app.route("/api/last/<int:nb_files>/download")
 @api_login_required
 def api_last_n_files_download(nb_files):
     """Handle API download of last n files."""
