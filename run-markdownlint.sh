@@ -15,7 +15,7 @@ check_command() {
 }
 
 # Check if isort and black are installed globally
-check_command "pylint" "pip install pylint" || return 1
+check_command "markdownlint-cli2" "npm install markdownlint-cli2 --global" || return 1
 
-# If pylint is installed, run pylint on all Python files
-pylint ./**/*.py --output-format text
+# If markdownlint-cli2 is installed, fix linting issues in Markdown files
+markdownlint-cli2 ./**/*.md --fix
