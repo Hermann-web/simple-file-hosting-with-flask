@@ -1,91 +1,125 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+    />
+    <title>Home - File Upload</title>
+
+    <!--PWA setup-->
+    <link
+      rel="icon"
+      sizes="192x192"
+      href="{{ url_for('static', filename='images/android-launchericon-192-192.png') }}"
+    />
+    <link
+      rel="manifest"
+      href="{{ url_for('static', filename='manifest.json') }}"
+    />
+    <meta name="description" content="A file upload web app" />
 
     <!-- Link to Bootstrap JS and jQuery (required for Bootstrap) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- https://www.cssscript.com/fast-html-table-sorting/ -->
-	<link rel="stylesheet" href="/sortable-js/sortable.min.css" />
-    <script src="/sortable-js/sortable.min.js"></script>
-	<link rel="stylesheet" href="/progress-bar/index.css" />
-    <script src="/progress-bar/index-download.js"></script>
-    <script src="/progress-bar/index-upload.js"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='progress-bar/sortable-js/sortable.min.css') }}"
+    />
+    <script src="{{ url_for('static', filename='progress-bar/sortable-js/sortable.min.js') }}"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='progress-bar/index.css') }}"
+    />
+    <script src="{{ url_for('static', filename='progress-bar/index-download.js') }}"></script>
+    <script src="{{ url_for('static', filename='progress-bar/index-upload.js') }}"></script>
     <style>
-        /* Add custom CSS for dark background */
-        body {
-            background-color: #333;
-            color: #fff;
-        }
-        .sortable {
-            --td-color: #fff !important;
-        }
+      /* Add custom CSS for dark background */
+      body {
+        background-color: #333;
+        color: #fff;
+      }
+      .sortable {
+        --td-color: #fff !important;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container mt-5">
-        <h1 class="text-light">File Upload</h1>
-        <form action="/upload" method="POST" enctype="multipart/form-data" id="upload-form-index">
-            <div class="mb-3">
-                <input type="file" class="form-control" name="file">
-            </div>
-            <button type="submit" class="btn btn-primary">Upload</button>
-        </form>
-        <!-- Logout btn -->
-        <a href="/logout" class="btn btn-danger">Logout</a>
+      <h1 class="text-light">File Upload</h1>
+      <form
+        action="/upload"
+        method="POST"
+        enctype="multipart/form-data"
+        id="upload-form-index"
+      >
+        <div class="mb-3">
+          <input type="file" class="form-control" name="file" />
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+      </form>
+      <!-- Logout btn -->
+      <a href="/logout" class="btn btn-danger">Logout</a>
 
-        <div id="download-wrapper"></div>
-        <div id="upload-wrapper"></div>
-        
-        <h2 class="mt-5 text-light">Uploaded Files:</h2>
-        {% if files %}
-            <div class="table-responsive">
-                <table class="table table-dark table-striped sortable">
-                    <thead>
-                        <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">File Name</th>
-                            <th scope="col"  class="no-sort">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for file in files|reverse %}
-                            <tr>
-                                <td>{{ file[1] }}</td>
-                                <td>{{ file[0] }}</td>
-                                <td>
-                                    <a href="{{ url_for('download', filename=file[0]) }}" class="btn btn-success btn-sm" role="button" id="download-btn">Download</a>
-                                    <a href="{{ url_for('open_file', filename=file[0]) }}" class="btn btn-info btn-sm" role="button">Open</a>
-                                    <a href="{{ url_for('raw_file', filename=file[0]) }}" class="btn btn-info btn-sm" role="button">Raw</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        {% else %}
-            <p>No files uploaded yet.</p>
-        {% endif %}
+      <div id="download-wrapper"></div>
+      <div id="upload-wrapper"></div>
+
+      <h2 class="mt-5 text-light">Uploaded Files:</h2>
+      {% if files %}
+      <div class="table-responsive">
+        <table class="table table-dark table-striped sortable">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">File Name</th>
+              <th scope="col" class="no-sort">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for file in files|reverse %}
+            <tr>
+              <td>{{ file[1] }}</td>
+              <td>{{ file[0] }}</td>
+              <td>
+                <a
+                  href="{{ url_for('download', filename=file[0]) }}"
+                  class="btn btn-success btn-sm"
+                  role="button"
+                  id="download-btn"
+                  >Download</a
+                >
+                <a
+                  href="{{ url_for('open_file', filename=file[0]) }}"
+                  class="btn btn-info btn-sm"
+                  role="button"
+                  >Open</a
+                >
+                <a
+                  href="{{ url_for('raw_file', filename=file[0]) }}"
+                  class="btn btn-info btn-sm"
+                  role="button"
+                  >Raw</a
+                >
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p>No files uploaded yet.</p>
+      {% endif %}
     </div>
-	
-	<script>
-        if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/service-worker.js')
-              .then(registration => {
-                console.log('Service Worker registered with scope:', registration.scope);
-              })
-              .catch(error => {
-                console.error('Service Worker registration failed:', error);
-              });
-          });
-        }
-    </script>
 
-
-</body>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='app.js') }}"
+    ></script>
+  </body>
 </html>

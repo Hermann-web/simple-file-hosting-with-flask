@@ -14,8 +14,5 @@ check_command() {
     return 0
 }
 
-# Check if isort and black are installed globally
-check_command "markdownlint-cli2" "npm install markdownlint-cli2 --global" || return 1
-
-# If markdownlint-cli2 is installed, fix linting issues in Markdown files
-find -type f \( -path ".*/docs/*.md" -o -name "readme.md" \) -exec markdownlint-cli2 --fix {} +
+check_command "prettier" "npm install prettier --global" || return 1
+prettier src/templates/*.html --write

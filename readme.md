@@ -1,6 +1,57 @@
 # File Sharing App
 
-A simple Flask application for sharing files.
+__A simple Flask application for sharing files.__
+
+This Flask-based file manager provides a user-friendly interface for managing files uploaded to the server. It allows users to upload, download, and view files through a web interface. Additionally, it provides an API and a CLI App for programmatic access to file management functionalities.
+
+## Features
+
+### User Authentication
+
+- Users can log in with a username and password to access the file manager's functionalities.
+- Authentication is implemented both for web interface access and API access.
+
+### File Management
+
+- Users can upload files to the server through the web interface or API.
+- Uploaded files are stored in a specified upload folder on the server.
+- File download and viewing functionalities are available through both the web interface and API.
+
+### File Listing and Sorting
+
+- The application provides a list of uploaded files along with their modification dates.
+- Users can view the list of files sorted in ascending or descending order by modification date.
+
+### Last N Files Download API
+
+- An API endpoint allows users to download the last N uploaded files as a zip archive.
+- Users can specify the number of files to include in the archive and provide a custom filename.
+
+### Markdown File Support
+
+- The application supports viewing Markdown (.md) files directly through the web interface.
+- Markdown files are rendered as plain text for easier readability.
+
+<!-- ### PWA Offline Access
+
+- Once installed as a PWA, users can access the application offline, enhancing usability in low-connectivity environments. -->
+
+### Caching Headers
+
+- The application sets caching headers to instruct the browser not to cache the rendered pages, ensuring that users always access the latest content.
+
+### Progressive Web App (PWA) Setup
+
+- The application is configured as a Progressive Web App (PWA), allowing users to install it on their devices and use it like a native app.
+- The PWA setup enables offline access, push notifications, and improved performance.
+
+## Installation and Setup
+
+### Prerequisites
+
+- Python 3.x
+- Flask
+- Python packages specified in `requirements.txt`
 
 ## Installation
 
@@ -77,14 +128,30 @@ To deploy the File Sharing App, follow these steps:
 
 Remember to follow best practices for securing your deployed application.
 
+## Todo
+
+1. __Extensions Handling__: Improve MIME Content-type for file opening and raw file parsing. Utilize the extensions map from [github/freelamb/simple_http_server](https://github.com/freelamb/simple_http_server/blob/master/simple_http_server.py#L242) to enhance the versatility of file uploads and downloads.
+
+2. - __Inspiration from Other Repositories__: The [simple_http_server](https://github.com/freelamb/simple_http_server) repository as an interesting resource for download handlers.
+
+3. __CLI App Enhancement__: Investigate the possibility of implementing bash completion for the CLI app to streamline command-line interactions. Refer to resources and discussions on implementing bash completion for Python applications, such as those found [here](https://stackoverflow.com/questions/8387924/python-argparse-and-bash-completion), to improve usability and efficiency.
+
+## Contributors
+
+- Hermann AGOSSOU
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
 
-## Todo
+## Links
 
-1. **Extensions Handling**: Improve MIME Content-type for file opening and raw file parsing. Utilize the extensions map from [github/freelamb/simple_http_server](https://github.com/freelamb/simple_http_server/blob/master/simple_http_server.py#L242) to enhance the versatility of file uploads and downloads.
+- Repository: <https://github.com/hermann-web/simple-file-hosting-with-flask>
+- Issue tracker: <https://github.com/hermann-web/simple-file-hosting-with-flask/issues>
+- Inspiration and references:
+- [Flask](https://flask.palletsprojects.com/) Web framework for Python.
+- [Flask PWA demo](https://github.com/uwi-info3180/flask-pwa)
 
-2. - **Inspiration from Other Repositories**: The [simple_http_server](https://github.com/freelamb/simple_http_server) repository as an interesting resource for download handlers.
+## Contact
 
-3. **CLI App Enhancement**: Investigate the possibility of implementing bash completion for the CLI app to streamline command-line interactions. Refer to resources and discussions on implementing bash completion for Python applications, such as those found [here](https://stackoverflow.com/questions/8387924/python-argparse-and-bash-completion), to improve usability and efficiency.
+For any inquiries or issues, please contact [this mail address](agossouhermann7@gmail.com).

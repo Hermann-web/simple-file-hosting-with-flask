@@ -32,7 +32,8 @@ from src.constants import (
 )
 from src.utils import create_zip_archive
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=str(STATIC_FOLDER))
+
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["DATA_FILE"] = DATA_FILE
 app.config["SECRET_KEY"] = FLASK_SECRET_KEY
@@ -381,6 +382,16 @@ def raw_file(filename):
 def static_files(filename):
     """Serve static files."""
     return send_from_directory(STATIC_FOLDER, filename)
+
+
+@app.after_request
+def add_header(response):
+    """
+    Add headers to tell the browser not to cache the rendered page. If we wanted
+    to we could change max-age to 600 seconds which would be 10 minutes.
+    """
+    response.headers["Cache-Control"] = "public, max-age=0"
+    return response
 
 
 if __name__ == "__main__":
