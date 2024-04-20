@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "flask-file-manager"
+name = "flask-file-share"
 version = "0.1.0"
-description = "Flask-based file manager with web interface, API, and CLI app"
+description = "Flask-based file sharing with web interface, API, and CLI app"
 authors = ["hermann-web <hermannagossou6@gmail.com>"]
 license = "MIT"
 readme = "readme.md"
 packages = [
-    {from = "src", include = "filemanager"}
+    {from = "src", include = "flask_file_share"}
 ]
 
 [tool.poetry.dependencies]
@@ -21,6 +21,7 @@ requests = "^2.31.0"
 yapf = "^0.40.2"
 flake8 = "^7.0.0"
 isort = "^5.13.2"
+mypy = "^1.9.0"
 
 [tool.yapf]
 based_on_style = "google"

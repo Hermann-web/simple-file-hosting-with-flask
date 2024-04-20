@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 from werkzeug.datastructures import FileStorage
 
@@ -32,7 +32,7 @@ def get_files_with_dates() -> List[Tuple]:
     """Retrieve files with their modification dates."""
     data = load_data_from_json()
     return [(filename, data[filename])
-            for filename in sorted(data, key=data.get)
+            for filename in sorted(data, key=data.__getitem__)
             if (st.UPLOAD_FOLDER / filename).exists()]
 
 
@@ -46,7 +46,8 @@ def update_data_file(filename: str):
 
 def handle_file_saving(file: FileStorage) -> str:
     """Handle saving of uploaded files."""
-    filename = slugify_filename(file.filename)
+    filename = file.filename or "file-" + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ".file"
+    filename = slugify_filename(filename)
     file_save = st.UPLOAD_FOLDER / filename
     print(f"saving {file_save.resolve()}")
     file.save(file_save)
@@ -58,11 +59,11 @@ def handle_file_saving(file: FileStorage) -> str:
 def get_last_n_files(nb_files: int) -> List[str]:
     """Get the last n files."""
     data = load_data_from_json()
-    files = sorted(data, key=data.get, reverse=True)[:nb_files]
+    files = sorted(data, key=data.__getitem__, reverse=True)[:nb_files]
     return files
 
 
-def get_content_type(file_path: str) -> str:
+def get_content_type(file_path: str) -> Union[str, None]:
     """
     Get content type based on file extension.
 
@@ -73,7 +74,7 @@ def get_content_type(file_path: str) -> str:
         str: Content type of the file.
     """
     # Determine the content type based on the file extension
-    mime_type, _ = get_file_content_type(file_path)
+    mime_type = get_file_content_type(file_path)
 
     # Map .md and .mmd extensions to text/plain
     if mime_type in ("text/markdown", "text/x-markdown"):

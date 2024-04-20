@@ -100,9 +100,10 @@ def api_logout():
 def upload():
     """Handle file upload."""
     file = request.files["file"]
-    if file:
-        handle_file_saving(file)
-    return redirect("/")
+    if not file.filename:
+        return redirect("/")
+
+    handle_file_saving(file)
 
 
 @app.route("/api/upload", methods=["POST"])
@@ -167,12 +168,12 @@ def open_file(filename: str):
     if mime_type in ("text/markdown", "text/x-markdown"):
         mime_type = "text/plain"
 
-    if mime_type:
-        with open(file_path, "rb") as file:
-            file_content = file.read()
-        return Response(file_content, content_type=mime_type)
+    if not mime_type:
+        return "Unknown file type"
 
-    return "Unknown file type"
+    with open(file_path, "rb") as file:
+        file_content = file.read()
+    return Response(file_content, content_type=mime_type)
 
 
 @app.route("/raw/<path:filename>")

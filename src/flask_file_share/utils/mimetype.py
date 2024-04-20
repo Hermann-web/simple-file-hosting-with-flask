@@ -1,7 +1,8 @@
 import mimetypes
+from typing import Union
 
 
-def get_file_content_type(file_path: str) -> str:
+def get_file_content_type(file_path: str) -> Union[str, None]:
     """
     Get content type based on file extension using the mimetypes built-in library.
 

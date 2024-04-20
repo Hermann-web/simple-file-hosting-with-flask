@@ -3,7 +3,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Generator
 
-from filemanager.client import FileSharingClient
+from flask_file_share.client import FileSharingClient
 
 DEFAULT_BASE_URL = "http://localhost:5000"
 

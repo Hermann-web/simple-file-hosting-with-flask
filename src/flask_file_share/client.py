@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 import requests
 
@@ -15,7 +15,7 @@ class FileSharingClient:
         self.session = requests.Session()
         self.is_logged_in = False
 
-    def login(self) -> bool:
+    def login(self):
         print("\n>>>", end="")
         url = f"{self.base_url}/login"
         headers = {"Content-Type": "application/json"}
@@ -72,7 +72,7 @@ class FileSharingClient:
                     f"Failed to upload file from {file_path} : status_code={response.status_code}")
             print(response.text)
 
-    def download_file(self, filename: str, folder_path: str, save_filename: str = ""):
+    def download_file(self, filename: str, folder_path: Union[str, Path], save_filename: str = ""):
         if not self.is_logged_in:
             self.login()
         print("\n>>>", end="")
@@ -88,17 +88,17 @@ class FileSharingClient:
             print(f"Failed to download file : status_code={response.status_code}")
             return
 
-        if not filename:
-            filename = save_filename
-        if not filename:
-            filename = "output.out"
+        filename = save_filename or filename
         saved_path = Path(folder_path) / filename
 
         with open(saved_path, "wb") as file:
             file.write(response.content)
         print(f"File downloaded and saved to {saved_path.resolve()}")
 
-    def download_last_n_files(self, n: int, folder_path: str, filename: Optional[str] = None):
+    def download_last_n_files(self,
+                              n: int,
+                              folder_path: Union[str, Path],
+                              filename: Optional[str] = None):
         if not self.is_logged_in:
             self.login()
 

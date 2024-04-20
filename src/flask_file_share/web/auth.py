@@ -1,6 +1,7 @@
 from functools import wraps
 
-from flask import Response, jsonify, redirect, request, session
+from flask import jsonify, redirect, request, session
+from werkzeug.wrappers.response import Response as Wk_Response
 
 from .. import settings as st
 
@@ -52,7 +53,7 @@ def api_login_required(func):
     return decorated_function
 
 
-def sucessful_login_redirect() -> Response:
+def sucessful_login_redirect() -> Wk_Response:
     """Redirect user after successful login."""
     return redirect(session.pop("previous_url") if "previous_url" in session else "\\")
 
