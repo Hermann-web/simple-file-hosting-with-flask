@@ -5,6 +5,7 @@ import requests
 
 
 class FileSharingClient:
+
     def __init__(self, username, password, base_url):
         self.username = username
         self.password = password
@@ -23,9 +24,7 @@ class FileSharingClient:
         if response.status_code != 200:
             print(f"Login failed: status_code={response.status_code}")
 
-        response_json = json.loads(
-            response.content.decode()
-        )  # json.loads(response.text)
+        response_json = json.loads(response.content.decode())  # json.loads(response.text)
         if response_json.get("message") != "Login successful":
             print(f"Login failed: status_code={response.status_code}")
 
@@ -69,8 +68,7 @@ class FileSharingClient:
 
             else:
                 print(
-                    f"Failed to upload file from {file_path} : status_code={response.status_code}"
-                )
+                    f"Failed to upload file from {file_path} : status_code={response.status_code}")
             print(response.text)
 
     def download_file(self, filename, folder_path, save_filename=""):
@@ -109,9 +107,7 @@ class FileSharingClient:
         response = self.session.get(url, params=params)
 
         if response.status_code != 200:
-            print(
-                f"Failed to download last {n} files: status_code={response.status_code}"
-            )
+            print(f"Failed to download last {n} files: status_code={response.status_code}")
             return
 
         content_disposition = response.headers.get("Content-Disposition")

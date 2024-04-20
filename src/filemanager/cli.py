@@ -9,9 +9,7 @@ DEFAULT_BASE_URL = "http://localhost:5000"
 
 
 @contextmanager
-def client_session_manager(
-    host, username, password
-) -> Generator[FileSharingClient, None, None]:
+def client_session_manager(host, username, password) -> Generator[FileSharingClient, None, None]:
     client = FileSharingClient(username=username, password=password, base_url=host)
     # create a session
     client.login()
@@ -107,12 +105,8 @@ def main():
     parser.add_argument("-u", "--username", help="Username")
     parser.add_argument("-p", "--password", help="Password")
     parser.add_argument("-f", "--file", help="File to upload or download")
-    parser.add_argument(
-        "-o", "--output", help="Directory or file path to save the downloaded file"
-    )
-    parser.add_argument(
-        "-n", "--nbfiles", type=int, help="Number of files to list or download"
-    )
+    parser.add_argument("-o", "--output", help="Directory or file path to save the downloaded file")
+    parser.add_argument("-n", "--nbfiles", type=int, help="Number of files to list or download")
     parser.add_argument(
         "-r",
         "--order",
@@ -125,9 +119,8 @@ def main():
         print("Please provide a username and password")
         return
 
-    with client_session_manager(
-        host=args.host, username=args.username, password=args.password
-    ) as file_sharing_client:
+    with client_session_manager(host=args.host, username=args.username,
+                                password=args.password) as file_sharing_client:
         assert isinstance(file_sharing_client, FileSharingClient)
         print("\n>>>proceed...\n")
 

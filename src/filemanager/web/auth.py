@@ -1,11 +1,9 @@
-from flask import (
-    jsonify,
-    redirect,
-    request,
-    session,
-)
 from functools import wraps
+
+from flask import jsonify, redirect, request, session
+
 from .. import settings as st
+
 
 def validate_credentials(username, password):
     """
@@ -52,6 +50,7 @@ def api_login_required(func):
         return func(*args, **kwargs)
 
     return decorated_function
+
 
 def sucessful_login_redirect():
     """Redirect user after successful login."""

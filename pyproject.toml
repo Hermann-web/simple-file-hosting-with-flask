@@ -20,6 +20,11 @@ requests = "^2.31.0"
 [tool.poetry.group.dev.dependencies]
 yapf = "^0.40.2"
 flake8 = "^7.0.0"
+isort = "^5.13.2"
+
+[tool.yapf]
+based_on_style = "google"
+column_limit = 100
 
 [build-system]
 requires = ["poetry-core"]

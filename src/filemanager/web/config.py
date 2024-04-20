@@ -1,7 +1,7 @@
 """Import necessary libraries and modules."""
-from datetime import  timedelta
+from datetime import timedelta
 
-from flask import (Flask)
+from flask import Flask
 
 from .. import settings as st
 
@@ -14,4 +14,4 @@ app.config["DEBUG"] = st.DEBUG
 # Set the session timeout to 30 minutes (1800 seconds)
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
 
-__all__ = ['app']
+__all__ = ["app"]

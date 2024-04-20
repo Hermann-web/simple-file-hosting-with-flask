@@ -1,10 +1,12 @@
+import json
 import mimetypes
-from .. import settings as st
-import json 
 from datetime import datetime
-from slugify import slugify
 
+from slugify import slugify
 from werkzeug.datastructures import FileStorage
+
+from .. import settings as st
+
 
 def load_data_from_json():
     """
@@ -21,17 +23,16 @@ def load_data_from_json():
                 pass
     return {}
 
+
 def get_files_with_dates():
     """Retrieve files with their modification dates."""
     data = load_data_from_json()
-    return [
-        (filename, data[filename])
-        for filename in sorted(data, key=data.get)
-        if (st.UPLOAD_FOLDER / filename).exists()
-    ]
+    return [(filename, data[filename])
+            for filename in sorted(data, key=data.get)
+            if (st.UPLOAD_FOLDER / filename).exists()]
 
 
-def update_data_file(filename:str):
+def update_data_file(filename: str):
     """Update data file with new file information."""
     data = load_data_from_json()
     data[filename] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -39,9 +40,7 @@ def update_data_file(filename:str):
         json.dump(data, file)
 
 
-
-
-def slugify_filename(filename:str):
+def slugify_filename(filename: str):
     """
     Slugify filename.
 
@@ -61,7 +60,8 @@ def slugify_filename(filename:str):
     slug_filename = f"{slug_base}.{extension}"
     return slug_filename
 
-def handle_file_saving(file:FileStorage):
+
+def handle_file_saving(file: FileStorage):
     """Handle saving of uploaded files."""
     filename = slugify_filename(file.filename)
     file_save = st.UPLOAD_FOLDER / filename
@@ -70,6 +70,7 @@ def handle_file_saving(file:FileStorage):
     update_data_file(filename)
     return filename
 
+
 # Function to get the last n files
 def get_last_n_files(nb_files):
     """Get the last n files."""
@@ -77,7 +78,8 @@ def get_last_n_files(nb_files):
     files = sorted(data, key=data.get, reverse=True)[:nb_files]
     return files
 
-def get_content_type(file_path:str):
+
+def get_content_type(file_path: str):
     """
     Get content type based on file extension.
 

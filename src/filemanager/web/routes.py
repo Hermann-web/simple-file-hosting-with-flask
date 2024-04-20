@@ -1,25 +1,16 @@
 """Import necessary libraries and modules."""
 from pathlib import Path
 
-from flask import (
-    Response,
-    jsonify,
-    make_response,
-    redirect,
-    request,
-    send_from_directory,
-)
-
-from .views import render_index_page, render_login_page
-
-from .utils import get_content_type, get_files_with_dates, get_last_n_files, handle_file_saving, load_data_from_json
-
-from .auth import api_login_required, clear_session, is_logged_in, login_required, sucessful_login_redirect, validate_credentials
+from flask import (Response, jsonify, make_response, redirect, request, send_from_directory)
 
 from ..settings import STATIC_FOLDER
-
 from ..utils.zip import create_zip_archive
+from .auth import (api_login_required, clear_session, is_logged_in, login_required,
+                   sucessful_login_redirect, validate_credentials)
 from .config import app
+from .utils import (get_content_type, get_files_with_dates, get_last_n_files, handle_file_saving)
+from .views import render_index_page, render_login_page
+
 
 @app.route("/")
 @login_required
@@ -42,16 +33,12 @@ def api_index():
     order = request.args.get("order", type=str, default="desc")
     if order not in ["asc", "desc"]:
         return (
-            jsonify(
-                {
-                    "message": 'Invalid value for parameter "order". Must be "asc" or "desc".'
-                }
-            ),
+            jsonify({"message": 'Invalid value for parameter "order". Must be "asc" or "desc".'}),
             400,
         )
 
     files = get_files_with_dates()
-    files = files[-min(nb_files, len(files)) :]
+    files = files[-min(nb_files, len(files)):]
 
     # Sort files based on the specified order
     if order == "asc":
@@ -60,9 +47,6 @@ def api_index():
         files = sorted(files, key=lambda x: x[1], reverse=True)
 
     return jsonify({"files": files})
-
-
-
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -94,6 +78,7 @@ def api_login():
 
     return jsonify({"message": "Invalid credentials"}), 401
 
+
 @app.route("/logout")
 def logout():
     """Handle user logout."""
@@ -106,7 +91,6 @@ def api_logout():
     """Handle API user logout."""
     clear_session()
     return jsonify({"message": "Logged out"})
-
 
 
 @app.route("/upload", methods=["POST"])
@@ -130,11 +114,9 @@ def api_upload():
     return jsonify({"message": f"File uploaded: {filename}"})
 
 
-
-
 @app.route("/uploads/<path:filename>")
 @login_required
-def download(filename:str):
+def download(filename: str):
     """Handle file download."""
 
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
@@ -142,17 +124,14 @@ def download(filename:str):
 
 @app.route("/api/uploads/<path:filename>")
 @api_login_required
-def api_download(filename:str):
+def api_download(filename: str):
     """Handle API file download."""
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 
-
-
-
 @app.route("/api/last/<int:nb_files>/download")
 @api_login_required
-def api_last_n_files_download(nb_files:int):
+def api_last_n_files_download(nb_files: int):
     """Handle API download of last n files."""
     files = get_last_n_files(nb_files)
 
@@ -160,9 +139,7 @@ def api_last_n_files_download(nb_files:int):
     filename = request.args.get("filename", None)
 
     # Call the create_zip_archive function from utils.py with the specified or generated filename
-    filename, zip_data = create_zip_archive(
-        files, app.config["UPLOAD_FOLDER"], filename=filename
-    )
+    filename, zip_data = create_zip_archive(files, app.config["UPLOAD_FOLDER"], filename=filename)
 
     # Prepare response with ZIP archive
     response = make_response(zip_data)
@@ -172,12 +149,9 @@ def api_last_n_files_download(nb_files:int):
     return response
 
 
-
-
-
 @app.route("/open/<path:filename>")
 @login_required
-def open_file(filename:str):
+def open_file(filename: str):
     """Open a file."""
     file_path = Path(app.config["UPLOAD_FOLDER"]) / filename
 
@@ -200,7 +174,7 @@ def open_file(filename:str):
 
 @app.route("/raw/<path:filename>")
 @login_required
-def raw_file(filename:str):
+def raw_file(filename: str):
     """Return raw file content."""
     file_path = Path(app.config["UPLOAD_FOLDER"]) / filename
 
@@ -214,13 +188,13 @@ def raw_file(filename:str):
 
 # Serve static files from the 'static' folder
 @app.route("/<path:filename>")
-def static_files(filename:str):
+def static_files(filename: str):
     """Serve static files."""
     return send_from_directory(STATIC_FOLDER, filename)
 
 
 @app.after_request
-def add_header(response:Response):
+def add_header(response: Response):
     """
     Add headers to tell the browser not to cache the rendered page. If we wanted
     to we could change max-age to 600 seconds which would be 10 minutes.
