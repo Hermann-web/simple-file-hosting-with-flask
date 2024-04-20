@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "flask-file-manager"
+version = "0.1.0"
+description = "Flask-based file manager with web interface, API, and CLI app"
+authors = ["hermann-web <hermannagossou6@gmail.com>"]
+license = "MIT"
+readme = "readme.md"
+packages = [
+    {from = "src", include = "filemanager"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+Flask = "^3.0.3"
+python-dotenv = "^1.0.1"
+python-slugify = "^8.0.4"
+requests = "^2.31.0"
+
+
+[tool.poetry.group.dev.dependencies]
+yapf = "^0.40.2"
+flake8 = "^7.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
