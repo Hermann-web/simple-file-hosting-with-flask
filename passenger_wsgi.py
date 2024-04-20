@@ -1,8 +1,12 @@
 import os
+from pathlib import Path
 import sys
 
-sys.path.insert(0, os.path.dirname(__file__))
-os.chdir(os.path.dirname(__file__))
-from web.app import app
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve() / "src"
+
+sys.path.insert(0, str(BASE_DIR))
+os.chdir(str(BASE_DIR))
+from filemanager.app import app
 
 application = app

@@ -19,24 +19,24 @@ else:
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-UPLOADS_DATA_DIR = BASE_DIR.parent
+UPLOADS_DATA_DIR = BASE_DIR.parent / "uploads"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
-UPLOAD_FOLDER = Path(os.getenv("UPLOAD_FOLDER", UPLOADS_DATA_DIR / "uploads")).absolute()
+UPLOAD_FOLDER = Path(os.getenv("UPLOAD_FOLDER", UPLOADS_DATA_DIR / "files")).resolve()
 UPLOAD_FOLDER.mkdir(exist_ok=True)
 
-DATA_FILE = Path(os.getenv("DATA_FILE", UPLOADS_DATA_DIR / "data.json")).absolute()
+DATA_FILE = Path(os.getenv("DATA_FILE", UPLOADS_DATA_DIR / "data.json")).resolve()
 assert DATA_FILE.parent.exists()
 
-STATIC_FOLDER = (BASE_DIR / "static").absolute()
-if STATIC_FOLDER.exists() or STATIC_FOLDER.is_file():
+STATIC_FOLDER = (BASE_DIR / "static").resolve()
+if not STATIC_FOLDER.exists() or STATIC_FOLDER.is_file():
     raise NotADirectoryError(f"STATIC_FOLDER={STATIC_FOLDER} does not exists as a folder")
 
-TEMPLATES_FOLDER = (BASE_DIR / "templates").absolute()
-if not TEMPLATES_FOLDER.exists() or STATIC_FOLDER.is_file():
-    raise NotADirectoryError(f"STATIC_FOLDER={STATIC_FOLDER} does not exists as a folder")
+TEMPLATES_FOLDER = (BASE_DIR / "templates").resolve()
+if not TEMPLATES_FOLDER.exists() or TEMPLATES_FOLDER.is_file():
+    raise NotADirectoryError(f"TEMPLATES_FOLDER={TEMPLATES_FOLDER} does not exists as a folder")
 
 USERNAME_STR = "FM_USERNAME"
 PASSWORD_STR = "FM_PASSWORD"
