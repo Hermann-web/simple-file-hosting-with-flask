@@ -1,11 +1,11 @@
 from functools import wraps
 
-from flask import jsonify, redirect, request, session
+from flask import Response, jsonify, redirect, request, session
 
 from .. import settings as st
 
 
-def validate_credentials(username, password):
+def validate_credentials(username: str, password: str) -> bool:
     """
     Validate user credentials.
 
@@ -21,7 +21,7 @@ def validate_credentials(username, password):
     return res
 
 
-def is_logged_in():
+def is_logged_in() -> bool:
     """Check if the user is logged in."""
     return "logged_in" in session and session["logged_in"]
 
@@ -52,7 +52,7 @@ def api_login_required(func):
     return decorated_function
 
 
-def sucessful_login_redirect():
+def sucessful_login_redirect() -> Response:
     """Redirect user after successful login."""
     return redirect(session.pop("previous_url") if "previous_url" in session else "\\")
 

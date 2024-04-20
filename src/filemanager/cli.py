@@ -9,7 +9,8 @@ DEFAULT_BASE_URL = "http://localhost:5000"
 
 
 @contextmanager
-def client_session_manager(host, username, password) -> Generator[FileSharingClient, None, None]:
+def client_session_manager(host: str, username: str,
+                           password: str) -> Generator[FileSharingClient, None, None]:
     client = FileSharingClient(username=username, password=password, base_url=host)
     # create a session
     client.login()

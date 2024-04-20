@@ -1,12 +1,13 @@
 import json
 from pathlib import Path
+from typing import Optional
 
 import requests
 
 
 class FileSharingClient:
 
-    def __init__(self, username, password, base_url):
+    def __init__(self, username: str, password: str, base_url: str):
         self.username = username
         self.password = password
         print(f"\n>>>base_url ={base_url}")
@@ -32,7 +33,7 @@ class FileSharingClient:
         # print(response_json)
         self.is_logged_in = True
 
-    def list_files(self, n=10, order="desc"):
+    def list_files(self, n: int = 10, order: str = "desc"):
         if not self.is_logged_in:
             self.login()
         print("\n>>>", end="")
@@ -55,7 +56,7 @@ class FileSharingClient:
 
         self.files = [elt[0] for elt in files]
 
-    def upload_file(self, file_path):
+    def upload_file(self, file_path: str):
         if not self.is_logged_in:
             self.login()
         print("\n>>>", end="")
@@ -71,7 +72,7 @@ class FileSharingClient:
                     f"Failed to upload file from {file_path} : status_code={response.status_code}")
             print(response.text)
 
-    def download_file(self, filename, folder_path, save_filename=""):
+    def download_file(self, filename: str, folder_path: str, save_filename: str = ""):
         if not self.is_logged_in:
             self.login()
         print("\n>>>", end="")
@@ -97,7 +98,7 @@ class FileSharingClient:
             file.write(response.content)
         print(f"File downloaded and saved to {saved_path.resolve()}")
 
-    def download_last_n_files(self, n, folder_path, filename=None):
+    def download_last_n_files(self, n: int, folder_path: str, filename: Optional[str] = None):
         if not self.is_logged_in:
             self.login()
 

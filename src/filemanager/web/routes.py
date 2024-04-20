@@ -3,13 +3,15 @@ from pathlib import Path
 
 from flask import (Response, jsonify, make_response, redirect, request, send_from_directory)
 
-from ..settings import STATIC_FOLDER
-from ..utils.zip import create_zip_archive
 from .auth import (api_login_required, clear_session, is_logged_in, login_required,
                    sucessful_login_redirect, validate_credentials)
 from .config import app
-from .utils import (get_content_type, get_files_with_dates, get_last_n_files, handle_file_saving)
+from .utils import (create_sharefile_zip_archive, get_content_type, get_files_with_dates,
+                    get_last_n_files, handle_file_saving)
 from .views import render_index_page, render_login_page
+
+UPLOAD_FOLDER = app.config["UPLOAD_FOLDER"]
+STATIC_FOLDER = app.config["STATIC_FOLDER"]
 
 
 @app.route("/")
@@ -119,14 +121,14 @@ def api_upload():
 def download(filename: str):
     """Handle file download."""
 
-    return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 
 @app.route("/api/uploads/<path:filename>")
 @api_login_required
 def api_download(filename: str):
     """Handle API file download."""
-    return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 
 @app.route("/api/last/<int:nb_files>/download")
@@ -138,8 +140,9 @@ def api_last_n_files_download(nb_files: int):
     # Get the filename from the query parameters or generate a unique filename
     filename = request.args.get("filename", None)
 
-    # Call the create_zip_archive function from utils.py with the specified or generated filename
-    filename, zip_data = create_zip_archive(files, app.config["UPLOAD_FOLDER"], filename=filename)
+    # compress the files
+    filepaths = [str(Path(UPLOAD_FOLDER) / fname) for fname in files]
+    filename, zip_data = create_sharefile_zip_archive(filepaths, output_fname=filename)
 
     # Prepare response with ZIP archive
     response = make_response(zip_data)
@@ -153,7 +156,7 @@ def api_last_n_files_download(nb_files: int):
 @login_required
 def open_file(filename: str):
     """Open a file."""
-    file_path = Path(app.config["UPLOAD_FOLDER"]) / filename
+    file_path = Path(UPLOAD_FOLDER) / filename
 
     if not file_path.exists():
         return "File not found"
@@ -176,7 +179,7 @@ def open_file(filename: str):
 @login_required
 def raw_file(filename: str):
     """Return raw file content."""
-    file_path = Path(app.config["UPLOAD_FOLDER"]) / filename
+    file_path = Path(UPLOAD_FOLDER) / filename
 
     if not file_path.exists():
         return "File not found"
