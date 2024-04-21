@@ -77,9 +77,9 @@ if DEBUG:
     logging.debug("SECRET_KEY: %s", SECRET_KEY)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
 
-UPLOADS_DATA_DIR = BASE_DIR.parent / "uploads"
+UPLOADS_DATA_DIR = Path(os.getcwd()).resolve() / "uploads"
 UPLOADS_DATA_DIR.mkdir(exist_ok=True)
 
 UPLOAD_FOLDER = Path(os.getenv("UPLOAD_FOLDER", UPLOADS_DATA_DIR / "files")).resolve()
