@@ -6,6 +6,10 @@ This document serves as a developer guide for the File Sharing Command-Line Inte
 
 ## Updates
 
+### 2024/04/21
+
+- You can install the python module `flask-file-share` then access the cli app using `ffs-cli` or `ffs cli`, with the same usage options as before
+
 ### 2024/02/10
 
 - Updated the listing method to include new options for listing files (`--nbfiles` and `--order`).
@@ -18,7 +22,7 @@ This document serves as a developer guide for the File Sharing Command-Line Inte
 To list files from the file sharing server, use the following command:
 
 ```bash
-python cli_app/sharefile.py list --username your_username --password your_password [--nbfiles number] [--order asc|desc]
+python src/flask_file_share/cli.py list --username your_username --password your_password [--nbfiles number] [--order asc|desc]
 ```
 
 - `--username`: Your username for authentication.
@@ -31,7 +35,7 @@ python cli_app/sharefile.py list --username your_username --password your_passwo
 To upload a file to the file sharing server, use the following command:
 
 ```bash
-python cli_app/sharefile.py upload --username your_username --password your_password --file path/to/file.txt
+python src/flask_file_share/cli.py upload --username your_username --password your_password --file path/to/file.txt
 ```
 
 - `--username`: Your username for authentication.
@@ -43,7 +47,7 @@ python cli_app/sharefile.py upload --username your_username --password your_pass
 To download a file from the file sharing server, use the following command:
 
 ```bash
-python cli_app/sharefile.py download --username your_username --password your_password --file file.txt --output path/to/save/file.txt
+python src/flask_file_share/cli.py download --username your_username --password your_password --file file.txt --output path/to/save/file.txt
 ```
 
 - `--username`: Your username for authentication.
@@ -56,7 +60,7 @@ python cli_app/sharefile.py download --username your_username --password your_pa
 To download the last N files from the file sharing server, use the following command:
 
 ```bash
-python cli_app/sharefile.py downloadl --username your_username --password your_password --nbfiles number --output path/to/save
+python src/flask_file_share/cli.py downloadl --username your_username --password your_password --nbfiles number --output path/to/save
 ```
 
 - `--username`: Your username for authentication.
