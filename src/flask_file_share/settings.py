@@ -17,7 +17,7 @@ else:
     logging.warning(".env file not found")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
 USERNAME_STR = "FM_USERNAME"
 PASSWORD_STR = "FM_PASSWORD"
@@ -51,6 +51,7 @@ if DEBUG:
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 UPLOADS_DATA_DIR = BASE_DIR.parent / "uploads"
+UPLOADS_DATA_DIR.mkdir(exist_ok=True)
 
 UPLOAD_FOLDER = Path(os.getenv("UPLOAD_FOLDER", UPLOADS_DATA_DIR / "files")).resolve()
 UPLOAD_FOLDER.mkdir(exist_ok=True)

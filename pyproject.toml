@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Flask-based file sharing with web interface, API, and CLI app"
 authors = ["hermann-web <hermannagossou6@gmail.com>"]
 license = "MIT"
-readme = "readme.md"
+readme = "README.md"
 packages = [
     {from = "src", include = "flask_file_share"}
 ]
@@ -23,6 +23,11 @@ flake8 = "^7.0.0"
 isort = "^5.13.2"
 mypy = "^1.9.0"
 pylint = "^3.1.0"
+
+[tool.poetry.group.buildthedocs.dependencies]
+sphinx = "^7.0.0"
+sphinx-rtd-theme = "^2.0.0"
+m2r2 = "^0.3.3.post2"
 
 [tool.yapf]
 based_on_style = "google"
