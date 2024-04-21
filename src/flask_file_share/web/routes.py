@@ -100,10 +100,8 @@ def api_logout():
 def upload():
     """Handle file upload."""
     file = request.files["file"]
-    if not file.filename:
-        return redirect("/")
-
     handle_file_saving(file)
+    return redirect("/")
 
 
 @app.route("/api/upload", methods=["POST"])

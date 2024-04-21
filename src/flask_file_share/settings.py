@@ -6,13 +6,13 @@ import logging
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # pylint: disable=E0401
 
 # Load environment variables from .env file if it exists
-dotenv_path = ".env"
-if os.path.exists(dotenv_path):
+_DOTENV_PATH = ".env"
+if os.path.exists(_DOTENV_PATH):
     logging.info("loading .env file")
-    load_dotenv(dotenv_path)
+    load_dotenv(_DOTENV_PATH)
 else:
     logging.warning(".env file not found")
 
@@ -42,10 +42,10 @@ if DEBUG:
     PASSWORD = os.getenv(PASSWORD_STR, "default_password")
     SECRET_KEY = os.getenv(SECRET_KEY_STR, "default_secret_key")
 
-    logging.warning(f"DEBUG: {DEBUG}")
-    logging.warning(f"USERNAME: {USERNAME}")
-    logging.warning(f"PASSWORD: {PASSWORD}")
-    logging.warning(f"SECRET_KEY: {SECRET_KEY}")
+    logging.debug("DEBUG: %s", DEBUG)
+    logging.debug("USERNAME: %s", USERNAME)
+    logging.debug("PASSWORD: %s", PASSWORD)
+    logging.debug("SECRET_KEY: %s", SECRET_KEY)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -69,5 +69,5 @@ if not TEMPLATES_FOLDER.exists() or TEMPLATES_FOLDER.is_file():
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
 # Set the session timeout to 30 minutes (1800 seconds)
-PERMANENT_SESSION_LIFETIME_MINUTES = float(os.getenv("PERMANENT_SESSION_LIFETIME_MINUTES", 30))
+PERMANENT_SESSION_LIFETIME_MINUTES = float(os.getenv("PERMANENT_SESSION_LIFETIME_MINUTES", "30"))
 assert PERMANENT_SESSION_LIFETIME_MINUTES > 0

@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import requests
 
@@ -14,6 +14,8 @@ class FileSharingClient:
         self.base_url = f"{base_url}/api"
         self.session = requests.Session()
         self.is_logged_in = False
+
+        self.files: List = []
 
     def login(self):
         print("\n>>>", end="")
@@ -33,11 +35,11 @@ class FileSharingClient:
         # print(response_json)
         self.is_logged_in = True
 
-    def list_files(self, n: int = 10, order: str = "desc"):
+    def list_files(self, nb_files: int = 10, order: str = "desc"):
         if not self.is_logged_in:
             self.login()
         print("\n>>>", end="")
-        url = f"{self.base_url}?n={n}&order={order}"
+        url = f"{self.base_url}?n={nb_files}&order={order}"
         response = self.session.get(url)
         print(response.text)
 
@@ -96,32 +98,32 @@ class FileSharingClient:
         print(f"File downloaded and saved to {saved_path.resolve()}")
 
     def download_last_n_files(self,
-                              n: int,
+                              nb_files: int,
                               folder_path: Union[str, Path],
                               filename: Optional[str] = None):
         if not self.is_logged_in:
             self.login()
 
-        url = f"{self.base_url}/last/{n}/download"
+        url = f"{self.base_url}/last/{nb_files}/download"
         params = {"filename": filename} if filename else None
 
         response = self.session.get(url, params=params)
 
         if response.status_code != 200:
-            print(f"Failed to download last {n} files: status_code={response.status_code}")
+            print(f"Failed to download last {nb_files} files: status_code={response.status_code}")
             return
 
         content_disposition = response.headers.get("Content-Disposition")
         if content_disposition:
             filename = content_disposition.split("filename=")[1].strip('"')
         else:
-            filename = f"last_{n}_files.zip"
+            filename = f"last_{nb_files}_files.zip"
 
         saved_path = Path(folder_path) / filename
         with open(saved_path, "wb") as file:
             file.write(response.content)
 
-        print(f"Last {n} files downloaded and saved to {saved_path.resolve()}")
+        print(f"Last {nb_files} files downloaded and saved to {saved_path.resolve()}")
 
     def logout(self):
         if not self.is_logged_in:

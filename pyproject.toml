@@ -22,10 +22,16 @@ yapf = "^0.40.2"
 flake8 = "^7.0.0"
 isort = "^5.13.2"
 mypy = "^1.9.0"
+pylint = "^3.1.0"
 
 [tool.yapf]
 based_on_style = "google"
 column_limit = 100
+
+[tool.poetry.scripts]
+ffs-app = "flask_file_share.app:main"
+ffs-cli = "flask_file_share.cli:main"
+ffs = "flask_file_share.main:main"
 
 [build-system]
 requires = ["poetry-core"]

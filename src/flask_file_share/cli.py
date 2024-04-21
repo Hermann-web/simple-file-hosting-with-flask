@@ -21,12 +21,12 @@ def client_session_manager(host: str, username: str,
         client.logout()
 
 
-def handle_login(*args, **kwargs):
+def handle_login(*args, **kwargs):  # pylint: disable=W0613
     """Handle login command."""
     return
 
 
-def handle_logout(*args, **kwargs):
+def handle_logout(*args, **kwargs):  # pylint: disable=W0613
     """Handle logout command."""
     return
 
@@ -35,7 +35,7 @@ def handle_list(args, file_sharing_client: FileSharingClient):
     """Handle list command."""
     nb_files = args.nbfiles if args.nbfiles else 10
     order = args.order if args.order else "desc"
-    file_sharing_client.list_files(n=nb_files, order=order)
+    file_sharing_client.list_files(nb_files=nb_files, order=order)
 
 
 def handle_upload(args, file_sharing_client: FileSharingClient):

@@ -1,4 +1,4 @@
-from slugify import slugify
+from slugify import slugify  # pylint: disable=E0401
 
 
 def slugify_filename(filename: str) -> str:
