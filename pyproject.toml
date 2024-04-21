@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flask-file-share"
-version = "0.1.1a1"
+version = "0.1.1"
 description = "Flask-based file sharing with web interface, API, and CLI app"
 authors = ["hermann-web <hermannagossou6@gmail.com>"]
 license = "MIT"
@@ -11,7 +11,7 @@ packages = [
 maintainers = [
     "Hermann Agossou <agossouhermann7@gmail.com>"
 ]
-homepage = "https://hermann-web.github.io/blog/blog/2023/11/14/flask-based-file-hosting-web-app--api--python-module--cli-app"
+homepage = "https://flask-file-share.readthedocs.io"
 repository = "https://github.com/Hermann-web/simple-file-hosting-with-flask"
 documentation = "https://flask-file-share.readthedocs.io"
 keywords = ["flask", "file sharing", "web interface", "API", "CLI"]

@@ -79,7 +79,7 @@ if DEBUG:
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent
 
-UPLOADS_DATA_DIR = Path(os.getcwd()).resolve() / "uploads"
+UPLOADS_DATA_DIR = Path(os.getenv("UPLOADS_DATA_DIR", os.getcwd() + "/uploads")).resolve()
 UPLOADS_DATA_DIR.mkdir(exist_ok=True)
 
 UPLOAD_FOLDER = Path(os.getenv("UPLOAD_FOLDER", UPLOADS_DATA_DIR / "files")).resolve()
