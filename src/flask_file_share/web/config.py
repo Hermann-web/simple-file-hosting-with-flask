@@ -1,4 +1,18 @@
-"""Import necessary libraries and modules."""
+"""
+File: config.py
+---------------
+
+Configuration module for the File Sharing Flask application.
+
+Description:
+    This module contains configuration settings for the Flask application, including upload folder,
+    static folder, and other application-specific configurations.
+
+Usage:
+    The configuration settings defined in this module are imported and used throughout the application
+    to configure Flask app, such as setting upload folder, static folder, and other Flask app configurations.
+"""
+
 from datetime import timedelta
 
 from flask import Flask

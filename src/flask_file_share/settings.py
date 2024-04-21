@@ -1,5 +1,34 @@
 """
-settings for the project.
+File: settings.py
+-----------------
+
+Settings for the File Sharing Flask application.
+
+Description:
+    This file contains configuration settings for the File Sharing Flask application. It defines constants
+    such as DEBUG mode, base directory, upload folder, data file path, static folder, templates folder,
+    allowed hosts, and session lifetime. It also loads environment variables from a .env file if it exists.
+
+Usage:
+    The settings are used throughout the application to configure various aspects such as file paths, session
+    lifetime, and debugging mode.
+
+Attributes:
+    - DEBUG (bool): A boolean flag indicating whether the application is running in debug mode.
+    - USERNAME_STR (str): The environment variable name for the username.
+    - PASSWORD_STR (str): The environment variable name for the password.
+    - SECRET_KEY_STR (str): The environment variable name for the secret key.
+    - USERNAME (str): The username used for authentication.
+    - PASSWORD (str): The password used for authentication.
+    - SECRET_KEY (str): The secret key used for encryption.
+    - BASE_DIR (Path): The base directory path of the application.
+    - UPLOADS_DATA_DIR (Path): The directory path for storing uploaded data.
+    - UPLOAD_FOLDER (Path): The directory path for storing uploaded files.
+    - DATA_FILE (Path): The path to the JSON file used for storing data.
+    - STATIC_FOLDER (Path): The directory path for static files.
+    - TEMPLATES_FOLDER (Path): The directory path for template files.
+    - ALLOWED_HOSTS (List[str]): A list of allowed hostnames or IP addresses.
+    - PERMANENT_SESSION_LIFETIME_MINUTES (float): The session timeout duration in minutes.
 """
 
 import logging

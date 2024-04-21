@@ -1,4 +1,4 @@
 #!/bin/bash
 # Script to run Flask app
 
-python ./src/app.py
+python ./src/flask_file_share/app.py

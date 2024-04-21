@@ -1,15 +1,26 @@
+"""
+File: slugify.py
+----------------
+
+A utility module for slugifying filenames.
+"""
+
 from slugify import slugify  # pylint: disable=E0401
 
 
 def slugify_filename(filename: str) -> str:
     """
-    Slugify filename.
+    Slugify the filename.
 
-    Args:
-        filename (str): Original filename.
+    Parameters
+    ----------
+    filename : str
+        The original filename.
 
-    Returns:
-        str: Slugified filename.
+    Returns
+    -------
+    str
+        The slugified filename.
     """
     # Split the filename and extension
     _ = filename.rsplit(".", 1)

@@ -1,4 +1,10 @@
-"""utility function"""
+"""
+File: zip.py
+------------
+
+A utility module for creating ZIP archives.
+"""
+
 import os
 import zipfile
 from io import BytesIO
@@ -9,12 +15,17 @@ def create_zip_archive(filepaths: List[str], output_fname: str) -> Tuple[str, by
     """
     Create a ZIP archive containing specified files.
 
-    Args:
-        filepaths (list): List of files to be included in the ZIP archive.
-        output_fname (str, optional): Name of the ZIP archive.
+    Parameters
+    ----------
+    filepaths : list of str
+        List of files to be included in the ZIP archive.
+    output_fname : str
+        Name of the ZIP archive.
 
-    Returns:
-        tuple: A tuple containing the filename of the ZIP archive and its content as bytes.
+    Returns
+    -------
+    tuple
+        A tuple containing the filename of the ZIP archive and its content as bytes.
     """
 
     # Create an in-memory ZIP archive

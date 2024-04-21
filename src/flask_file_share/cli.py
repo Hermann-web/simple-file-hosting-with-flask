@@ -1,3 +1,47 @@
+"""
+File: cli.py
+-----------------------
+
+A command-line interface (CLI) for interacting with the File Sharing Flask application.
+
+Functions:
+    - client_session_manager(host: str, username: str, password: str) -> Generator[FileSharingClient, None, None]:
+        Context manager for managing the client session.
+    - handle_login(*args, **kwargs): Handle login command.
+    - handle_logout(*args, **kwargs): Handle logout command.
+    - handle_list(args, file_sharing_client: FileSharingClient): Handle list command.
+    - handle_upload(args, file_sharing_client: FileSharingClient): Handle upload command.
+    - handle_download(args, file_sharing_client: FileSharingClient): Handle download command.
+    - handle_downloadl(args, file_sharing_client: FileSharingClient): Handle downloadl command.
+    - build_cli_parser(parser): Build CLI parser.
+    - parse_args(): Parse CLI arguments.
+    - main(args): Main function to execute CLI commands.
+
+Usage:
+    python cli.py <cli_command> [-H HOST] [-u USERNAME] [-p PASSWORD] [-f FILE] [-o OUTPUT] [-n NBFILES] [-r ORDER]
+
+Arguments:
+    cli_command : str
+        Command to execute (login, logout, list, upload, download, downloadl).
+    -H, --host : str, optional
+        Host server URL. Default is http://localhost:5000.
+    -u, --username : str, optional
+        Username for authentication.
+    -p, --password : str, optional
+        Password for authentication.
+    -f, --file : str, optional
+        File to upload or download.
+    -o, --output : str, optional
+        Directory or file path to save the downloaded file.
+    -n, --nbfiles : int, optional
+        Number of files to list or download.
+    -r, --order : str, optional
+        Order of files to list or download (asc or desc).
+
+Example:
+    python cli.py list -u myusername -p mypassword -n 5
+"""
+
 import argparse
 from contextlib import contextmanager
 from pathlib import Path
@@ -11,6 +55,24 @@ DEFAULT_BASE_URL = "http://localhost:5000"
 @contextmanager
 def client_session_manager(host: str, username: str,
                            password: str) -> Generator[FileSharingClient, None, None]:
+    """
+    Context manager for managing the client session.
+
+    Parameters
+    ----------
+    host : str
+        The host server URL.
+    username : str
+        The username for authentication.
+    password : str
+        The password for authentication.
+
+    Yields
+    ------
+    FileSharingClient
+        An instance of the FileSharingClient.
+
+    """
     client = FileSharingClient(username=username, password=password, base_url=host)
     # create a session
     client.login()
@@ -22,24 +84,48 @@ def client_session_manager(host: str, username: str,
 
 
 def handle_login(*args, **kwargs):  # pylint: disable=W0613
-    """Handle login command."""
+    """
+    Handle login command.
+    """
     return
 
 
 def handle_logout(*args, **kwargs):  # pylint: disable=W0613
-    """Handle logout command."""
+    """
+    Handle logout command.
+    """
     return
 
 
 def handle_list(args, file_sharing_client: FileSharingClient):
-    """Handle list command."""
+    """
+    Handle list command.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        The parsed command-line arguments.
+    file_sharing_client : FileSharingClient
+        An instance of the FileSharingClient.
+
+    """
     nb_files = args.nbfiles if args.nbfiles else 10
     order = args.order if args.order else "desc"
     file_sharing_client.list_files(nb_files=nb_files, order=order)
 
 
 def handle_upload(args, file_sharing_client: FileSharingClient):
-    """Handle upload command."""
+    """
+    Handle upload command.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        The parsed command-line arguments.
+    file_sharing_client : FileSharingClient
+        An instance of the FileSharingClient.
+
+    """
     if not args.file:
         print("Please provide a file to upload")
         return
@@ -47,7 +133,17 @@ def handle_upload(args, file_sharing_client: FileSharingClient):
 
 
 def handle_download(args, file_sharing_client: FileSharingClient):
-    """Handle download command."""
+    """
+    Handle download command.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        The parsed command-line arguments.
+    file_sharing_client : FileSharingClient
+        An instance of the FileSharingClient.
+
+    """
     if not args.file:
         print("Please provide a file to download")
         return
@@ -69,7 +165,17 @@ def handle_download(args, file_sharing_client: FileSharingClient):
 
 
 def handle_downloadl(args, file_sharing_client: FileSharingClient):
-    """Handle downloadl command."""
+    """
+    Handle downloadl command.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        The parsed command-line arguments.
+    file_sharing_client : FileSharingClient
+        An instance of the FileSharingClient.
+
+    """
     if not args.nbfiles:
         print("Please provide the number of files to download")
         return
@@ -91,6 +197,20 @@ def handle_downloadl(args, file_sharing_client: FileSharingClient):
 
 
 def build_cli_parser(parser):
+    """
+    Build CLI parser.
+
+    Parameters
+    ----------
+    parser : argparse.ArgumentParser
+        The ArgumentParser object.
+
+    Returns
+    -------
+    argparse.ArgumentParser
+        The modified ArgumentParser object.
+
+    """
     parser.add_argument(
         "cli_command",
         choices=["login", "logout", "list", "upload", "download", "downloadl"],
@@ -117,6 +237,15 @@ def build_cli_parser(parser):
 
 
 def parse_args():
+    """
+    Parse CLI arguments.
+
+    Returns
+    -------
+    argparse.Namespace
+        The parsed command-line arguments.
+
+    """
     parser = argparse.ArgumentParser(description="File sharing CLI")
     parser = build_cli_parser(parser)
     args = parser.parse_args()
@@ -124,6 +253,15 @@ def parse_args():
 
 
 def main(args):
+    """
+    Main function to execute CLI commands.
+
+    Parameters
+    ----------
+    args : argparse.Namespace
+        The parsed command-line arguments.
+
+    """
     if not (args.username and args.password):
         print("Please provide a username and password")
         return

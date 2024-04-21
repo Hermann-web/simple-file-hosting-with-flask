@@ -1,3 +1,30 @@
+"""
+File: client.py
+---------------
+
+Python client for interacting with the File Sharing Flask application.
+
+Class:
+    FileSharingClient: A client class for interacting with the File Sharing Flask application.
+
+Functions:
+    main(): Main function to execute CLI commands.
+
+Usage:
+    import flask_file_share as ffs
+
+    # Initialize the client
+    client = ffs.Client(username="your_username", password="your_password", base_url="http://localhost:5000")
+
+    # Example usage:
+    client.login()
+    client.upload_file("path/to/your/file.txt")
+    client.list_files()
+    client.download_file("filename.txt", "path/to/save")
+    client.download_last_n_files(5, "path/to/save")
+    client.logout()
+"""
+
 import json
 from pathlib import Path
 from typing import List, Optional, Union
@@ -8,6 +35,19 @@ import requests
 class FileSharingClient:
 
     def __init__(self, username: str, password: str, base_url: str):
+        """
+        Initialize the FileSharingClient instance.
+
+        Parameters
+        ----------
+        username : str
+            The username for authentication.
+        password : str
+            The password for authentication.
+        base_url : str
+            The base URL of the server.
+
+        """
         self.username = username
         self.password = password
         print(f"\n>>>base_url ={base_url}")
@@ -18,6 +58,10 @@ class FileSharingClient:
         self.files: List = []
 
     def login(self):
+        """
+        Log in to the server.
+
+        """
         print("\n>>>", end="")
         url = f"{self.base_url}/login"
         headers = {"Content-Type": "application/json"}
@@ -36,6 +80,17 @@ class FileSharingClient:
         self.is_logged_in = True
 
     def list_files(self, nb_files: int = 10, order: str = "desc"):
+        """
+        List files on the server.
+
+        Parameters
+        ----------
+        nb_files : int, optional
+            Number of files to list.
+        order : str, optional
+            Order of listing files.
+
+        """
         if not self.is_logged_in:
             self.login()
         print("\n>>>", end="")
@@ -59,6 +114,15 @@ class FileSharingClient:
         self.files = [elt[0] for elt in files]
 
     def upload_file(self, file_path: str):
+        """
+        Upload a file to the server.
+
+        Parameters
+        ----------
+        file_path : str
+            Path to the file to upload.
+
+        """
         if not self.is_logged_in:
             self.login()
         print("\n>>>", end="")
@@ -75,6 +139,19 @@ class FileSharingClient:
             print(response.text)
 
     def download_file(self, filename: str, folder_path: Union[str, Path], save_filename: str = ""):
+        """
+        Download a file from the server.
+
+        Parameters
+        ----------
+        filename : str
+            Name of the file to download.
+        folder_path : Union[str, Path]
+            Path to the folder to save the downloaded file.
+        save_filename : str, optional
+            Name to save the downloaded file as.
+
+        """
         if not self.is_logged_in:
             self.login()
         print("\n>>>", end="")
@@ -101,6 +178,19 @@ class FileSharingClient:
                               nb_files: int,
                               folder_path: Union[str, Path],
                               filename: Optional[str] = None):
+        """
+        Download the last N files from the server.
+
+        Parameters
+        ----------
+        nb_files : int
+            Number of files to download.
+        folder_path : Union[str, Path]
+            Path to the folder to save the downloaded files.
+        filename : str, optional
+            Name to save the downloaded file as.
+
+        """
         if not self.is_logged_in:
             self.login()
 
@@ -126,6 +216,10 @@ class FileSharingClient:
         print(f"Last {nb_files} files downloaded and saved to {saved_path.resolve()}")
 
     def logout(self):
+        """
+        Log out from the server.
+
+        """
         if not self.is_logged_in:
             self.login()
         print("\n>>>", end="")
@@ -139,6 +233,10 @@ class FileSharingClient:
 
 
 def main():
+    """
+    Main function to execute CLI commands.
+
+    """
     username = "****"  # put your user token here #the one in the .env file
     password = "****"  # put your user key here #the one in the .env file
     base_url = "http://localhost:5000"

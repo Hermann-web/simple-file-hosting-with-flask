@@ -1,6 +1,11 @@
 flask\_file\_share.web package
 ==============================
 
+.. automodule:: flask_file_share.web
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -30,14 +35,6 @@ Submodules
 
 
 .. automodule:: flask_file_share.web.views
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: flask_file_share.web
    :members:
    :undoc-members:
    :show-inheritance:

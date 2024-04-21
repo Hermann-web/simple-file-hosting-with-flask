@@ -1,3 +1,24 @@
+"""
+File: utils.py
+--------------
+
+Utility functions for the File Sharing Flask application.
+
+Functions:
+
+    - load_data_from_json(): Load data from the JSON file.
+    - get_files_with_dates(): Retrieve files with their modification dates.
+    - update_data_file(filename: str): Update the data file with new file information.
+    - handle_file_saving(file: FileStorage) -> str: Handle saving of uploaded files.
+    - get_last_n_files(nb_files: int) -> List[str]: Get the last n files.
+    - get_content_type(file_path: str) -> Union[str, None]: Get content type based on file extension.
+    - create_sharefile_zip_archive(filepaths: List[str], output_fname: Optional[str] = None) -> Tuple[str, bytes]: Create a ZIP archive containing specified files.
+
+Usage:
+    These utility functions are used across the application to perform various tasks such as loading data,
+    handling file uploads, retrieving file information, and creating ZIP archives.
+"""
+
 import json
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Union
@@ -10,7 +31,7 @@ from ..utils import create_zip_archive, get_file_content_type, slugify_filename
 
 def load_data_from_json() -> Dict[str, str]:
     """
-    Load data from JSON file.
+    Load data from the JSON file.
 
     Returns:
         dict: Loaded data from the JSON file.
@@ -29,7 +50,12 @@ def load_data_from_json() -> Dict[str, str]:
 
 
 def get_files_with_dates() -> List[Tuple]:
-    """Retrieve files with their modification dates."""
+    """
+    Retrieve files with their modification dates.
+
+    Returns:
+        list: List of tuples containing filename and modification dates.
+    """
     data = load_data_from_json()
     return [(filename, data[filename])
             for filename in sorted(data, key=data.__getitem__)
@@ -37,7 +63,12 @@ def get_files_with_dates() -> List[Tuple]:
 
 
 def update_data_file(filename: str):
-    """Update data file with new file information."""
+    """
+    Update the data file with new file information.
+
+    Args:
+        filename (str): Name of the file to update.
+    """
     data = load_data_from_json()
     data[filename] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(str(st.DATA_FILE), "w", encoding="utf-8") as file:
@@ -45,7 +76,15 @@ def update_data_file(filename: str):
 
 
 def handle_file_saving(file: FileStorage) -> str:
-    """Handle saving of uploaded files."""
+    """
+    Handle saving of uploaded files.
+
+    Args:
+        file (FileStorage): The uploaded file.
+
+    Returns:
+        str: Filename of the saved file.
+    """
     filename = file.filename or "file-" + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ".file"
     filename = slugify_filename(filename)
     file_save = st.UPLOAD_FOLDER / filename
@@ -57,7 +96,15 @@ def handle_file_saving(file: FileStorage) -> str:
 
 # Function to get the last n files
 def get_last_n_files(nb_files: int) -> List[str]:
-    """Get the last n files."""
+    """
+    Get the last n files.
+
+    Args:
+        nb_files (int): Number of files to retrieve.
+
+    Returns:
+        list: List of filenames.
+    """
     data = load_data_from_json()
     files = sorted(data, key=data.__getitem__, reverse=True)[:nb_files]
     return files
