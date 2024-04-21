@@ -83,14 +83,14 @@ def client_session_manager(host: str, username: str,
         client.logout()
 
 
-def handle_login(*args, **kwargs):  # pylint: disable=W0613
+def handle_login(args, file_sharing_client: FileSharingClient):  # pylint: disable=W0613
     """
     Handle login command.
     """
     return
 
 
-def handle_logout(*args, **kwargs):  # pylint: disable=W0613
+def handle_logout(args, file_sharing_client: FileSharingClient):  # pylint: disable=W0613
     """
     Handle logout command.
     """
@@ -196,7 +196,7 @@ def handle_downloadl(args, file_sharing_client: FileSharingClient):
     file_sharing_client.download_last_n_files(nb_files, folder, filename)
 
 
-def build_cli_parser(parser):
+def build_cli_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     """
     Build CLI parser.
 
@@ -236,7 +236,7 @@ def build_cli_parser(parser):
     return parser
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     """
     Parse CLI arguments.
 
@@ -252,7 +252,7 @@ def parse_args():
     return args
 
 
-def main(args):
+def main(args: argparse.Namespace):
     """
     Main function to execute CLI commands.
 
@@ -283,7 +283,7 @@ def main(args):
         handler = command_handlers.get(args.cli_command)
 
         if not handler:
-            raise ValueError(f"Invalid command {args.command}")
+            raise ValueError(f"Invalid command {args.cli_command}")
 
         handler(args, file_sharing_client)
 
