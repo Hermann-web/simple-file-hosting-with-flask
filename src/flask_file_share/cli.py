@@ -90,10 +90,9 @@ def handle_downloadl(args, file_sharing_client: FileSharingClient):
     file_sharing_client.download_last_n_files(nb_files, folder, filename)
 
 
-def main():
-    parser = argparse.ArgumentParser(description="File sharing CLI")
+def build_cli_parser(parser):
     parser.add_argument(
-        "command",
+        "cli_command",
         choices=["login", "logout", "list", "upload", "download", "downloadl"],
         help="Command to execute",
     )
@@ -114,8 +113,17 @@ def main():
         choices=["asc", "desc"],
         help="Order of files to list or download",
     )
-    args = parser.parse_args()
+    return parser
 
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="File sharing CLI")
+    parser = build_cli_parser(parser)
+    args = parser.parse_args()
+    return args
+
+
+def main(args):
     if not (args.username and args.password):
         print("Please provide a username and password")
         return
@@ -134,12 +142,14 @@ def main():
             "downloadl": handle_downloadl,
         }
 
-        handler = command_handlers.get(args.command)
-        if handler:
-            handler(args, file_sharing_client)
-        else:
-            print("Invalid command")
+        handler = command_handlers.get(args.cli_command)
+
+        if not handler:
+            raise ValueError(f"Invalid command {args.command}")
+
+        handler(args, file_sharing_client)
 
 
 if __name__ == "__main__":
-    main()
+    parsed_args = parse_args()
+    main(args=parsed_args)
