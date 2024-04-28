@@ -1,0 +1,14 @@
+.debhelper/
+flask-file-share/
+debhelper-build-stamp
+files
+flask-file-share.substvars
+
+project/debian/
+project/.pybuild/
+ffs_*.buildinfo
+ffs_*.changes
+ffs_*.xz
+ffs_*.dsc
+python-ffs-doc_*.deb
+README.md
