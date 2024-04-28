@@ -6,9 +6,9 @@ flask-file-share.substvars
 
 project/debian/
 project/.pybuild/
-ffs_*.buildinfo
-ffs_*.changes
-ffs_*.xz
-ffs_*.dsc
+f*_*.buildinfo
+f*_*.changes
+f*_*.xz
+f*_*.dsc
 python-ffs-doc_*.deb
 README.md

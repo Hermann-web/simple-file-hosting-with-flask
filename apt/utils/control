@@ -1,23 +1,23 @@
-Source: flask-file-share
+Source: <PKGNAME>
 Section: python
 Priority: optional
 Maintainer: Hermann Agossou <agossouhermann7@gmail.com>
 Build-Depends: debhelper-compat (= 13), dh-python, python3-setuptools, python3-all
 Standards-Version: 4.6.0
 Homepage: https://flask-file-share.readthedocs.io
-#Vcs-Browser: https://salsa.debian.org/debian/ffs
-#Vcs-Git: https://salsa.debian.org/debian/ffs.git
+#Vcs-Browser: https://salsa.debian.org/debian/<PKGNAME>
+#Vcs-Git: https://salsa.debian.org/debian/<PKGNAME>.git
 #Testsuite: autopkgtest-pkg-python
 Rules-Requires-Root: no
 
-Package: python3-ffs
+Package: python3-<PKGNAME>
 Architecture: all
-Depends: ${python3:Depends}, ${misc:Depends}, python3-flask (>= 2.0.1), python3-dotenv (>= 0.19.2), python3-requests (>= 2.25.1)
-Suggests: python-ffs-doc
+Depends: ${python3:Depends}, ${misc:Depends}, python3-flask (>= 2.0.1), python3-dotenv (>= 0.19.2), python3-requests (>= 2.25.1), python3-slugify (>= 4.0.0), python3 (>= 3.8.1)
+Suggests: python-<PKGNAME>-doc
 Description: Flask-based file sharing with web interface, API, and CLI app
  This package provides a Flask-based file sharing application with web interface, API, and CLI capabilities.
 
-Package: python-ffs-doc
+Package: python-<PKGNAME>-doc
 Architecture: all
 Section: doc
 Depends: ${sphinxdoc:Depends}, ${misc:Depends}
