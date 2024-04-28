@@ -5,10 +5,12 @@ File: slugify.py
 A utility module for slugifying filenames.
 """
 
+from pathlib import Path
+from typing import Union
 from slugify import slugify  # pylint: disable=E0401
 
 
-def slugify_filename(filename: str) -> str:
+def slugify_filepath(filename: Union[str, Path]) -> Path:
     """
     Slugify the filename.
 
@@ -22,12 +24,13 @@ def slugify_filename(filename: str) -> str:
     str
         The slugified filename.
     """
-    # Split the filename and extension
-    _ = filename.rsplit(".", 1)
-    assert len(_) == 2
-    base, extension = _
+    filename = Path(filename)
     # Slugify the base part
-    slug_base = slugify(base)
+    slug_base = slugify(filename.stem)
+    extension = filename.suffix.lower()
     # Join the slugified base with the original extension
-    slug_filename = f"{slug_base}.{extension}"
-    return slug_filename
+    slug_filename = f"{slug_base}{extension}"
+    return filename.parent / slug_filename
+
+def slugify_filename(filename: Union[str, Path]) -> str:
+    return str(slugify_filepath(filename))

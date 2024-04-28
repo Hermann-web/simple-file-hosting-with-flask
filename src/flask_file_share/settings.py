@@ -48,9 +48,9 @@ else:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
-USERNAME_STR = "FM_USERNAME"
-PASSWORD_STR = "FM_PASSWORD"
-SECRET_KEY_STR = "FM_SECRET_KEY"
+USERNAME_STR = "FFS_USERNAME"
+PASSWORD_STR = "FFS_PASSWORD"
+SECRET_KEY_STR = "FFS_SECRET_KEY"
 
 # Set values for username, password, and secret key
 if not DEBUG:
