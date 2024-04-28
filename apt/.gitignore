@@ -10,5 +10,5 @@ f*_*.buildinfo
 f*_*.changes
 f*_*.xz
 f*_*.dsc
-python-ffs-doc_*.deb
+python-f*-doc_*.deb
 README.md
