@@ -33,7 +33,7 @@ def find_data_files(folders:List[os.PathLike], src:os.PathLike):
 
 setup(
     name="flask-file-share",
-    version="0.1.1",
+    version="0.1.2",
     description="Flask-based file sharing with web interface, API, and CLI app",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",

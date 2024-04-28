@@ -8,7 +8,7 @@ CUR_FILE_DIR=$(dirname $(realpath "$0"))
 
 ## package name
 PACKAGE_NAME=ffs #flask-file-share
-VERSION=0.1.1
+VERSION=0.1.2
 DEB_VERSION_NUM=2
 PACKAGE_FULL_NAME="$PACKAGE_NAME"_"$VERSION" #-"$DEB_VERSION_NUM"
 
