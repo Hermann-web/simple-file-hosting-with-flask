@@ -7,7 +7,7 @@ SRC_FOLDER = "../../src"
 
 def find_data_files(folders:List[os.PathLike], src:os.PathLike):
     
-    src_folder = Path(src).resolve()
+    src_folder = Path(src) #.relative_to(Path(__file__).parent)
     
     # Check if the source directory exists
     if not src_folder.exists() or not src_folder.is_dir():
@@ -37,8 +37,8 @@ setup(
     description="Flask-based file sharing with web interface, API, and CLI app",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    author="hermann-web",
-    author_email="hermannagossou6@gmail.com",
+    author="Hermann Agossou",
+    author_email="agossouhermann7@gmail.com",
     url="https://flask-file-share.readthedocs.io",
     license="MIT",
     packages=find_packages(SRC_FOLDER),
