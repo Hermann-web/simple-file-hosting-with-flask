@@ -27,7 +27,7 @@ Usage:
 
 import json
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import requests
 
@@ -55,7 +55,7 @@ class FileSharingClient:
         self.session = requests.Session()
         self.is_logged_in = False
 
-        self.files: List = []
+        self.files: list = []
 
     def login(self):
         """
@@ -102,14 +102,14 @@ class FileSharingClient:
             print(f"Failed to retrieve files: status_code={response.status_code}")
             return
 
-        files = response.json().get("files")
+        files: list[tuple[str, str]] = response.json().get("files")
         if not files:
             print(f"No files found: status_code={response.status_code}")
             return
 
         print("Files:")
         for file in files:
-            print(file)
+            print(f"date: {file[1]} -> fname: {file[0]}")
 
         self.files = [elt[0] for elt in files]
 
@@ -205,11 +205,11 @@ class FileSharingClient:
 
         content_disposition = response.headers.get("Content-Disposition")
         if content_disposition:
-            filename = content_disposition.split("filename=")[1].strip('"')
+            _filename = content_disposition.split("filename=")[1].strip('"')
         else:
-            filename = f"last_{nb_files}_files.zip"
+            _filename = f"last_{nb_files}_files.zip"
 
-        saved_path = Path(folder_path) / filename
+        saved_path = Path(folder_path) / _filename
         with open(saved_path, "wb") as file:
             file.write(response.content)
 
@@ -241,8 +241,9 @@ def main():
     password = "****"  # put your user key here #the one in the .env file
     base_url = "http://localhost:5000"
     # Example usage:
-    input_folder = Path("examples/data")
-    output_folder = Path("examples/output")
+    input_folder = Path("tests/data")
+    assert input_folder.exists(), f"{input_folder.absolute()} not found"
+    output_folder = Path("tests/output")
     output_folder.mkdir(exist_ok=True)
     client = FileSharingClient(username=username, password=password, base_url=base_url)
     client.login()
